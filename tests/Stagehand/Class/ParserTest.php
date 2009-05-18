@@ -67,28 +67,40 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
      * @access private
      */
 
+    private $_filename;
+
     /**#@-*/
 
     /**#@+
      * @access public
      */
 
-    public function setUp() { }
+    public function setUp()
+    {
+        $this->_filename = dirname(__FILE__) . '/ParserTest/Foo.php';
+    }
 
     public function tearDown() { }
 
     /**
      * @test
      */
-    public function parseConstants()
+    public function parseAClass()
     {
-        $filename = dirname(__FILE__) . '/ParserTest/Foo.php';
-        $class = Stagehand_Class_Parser::parse($filename);
+        $class = Stagehand_Class_Parser::parse($this->_filename);
 
         $this->assertType('Stagehand_Class', $class);
         $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Foo');
         $this->assertFalse($class->isAbstract());
         $this->assertFalse($class->isInterface());
+    }
+
+    /**
+     * @test
+     */
+    public function parseAllConstantsOfAClass()
+    {
+        $class = Stagehand_Class_Parser::parse($this->_filename);
 
         $constants = $class->getConstants();
 
