@@ -82,7 +82,7 @@ class Stagehand_Class_Parser
      * @param string $filename  a filename of PHP script.
      * @return mixed
      */
-    public function parse($filename)
+    public static function parse($filename)
     {
         $lexer = new Stagehand_PHP_Lexer($filename);
         $filter = new Stagehand_Class_Parser_Filter();
