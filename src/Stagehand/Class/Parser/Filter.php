@@ -69,6 +69,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
     private $_classes = array();
 
+    private $_currentConstants = array();
+
     /**#@-*/
 
     /**#@+
@@ -115,10 +117,38 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      *
      * @param Stagehand_Class $calss
      */
-    public function addClass($class)
+    public function addClass(Stagehand_Class $class)
     {
         array_push($this->_classes, $class);
     }
+
+
+    // }}}
+    // {{{ getCurrentConstants()
+
+    /**
+     * Gets all current constants.
+     *
+     * @return array
+     */
+    public function getCurrentConstants()
+    {
+        return $this->_currentConstants;
+    }
+
+    // }}}
+    // {{{ addCurrentConstant
+
+    /**
+     * Adds a current constant.
+     *
+     * @param Stagehand_Class_Constant $constant
+     */
+    public function addCurrentConstant(Stagehand_Class_Constant $constant)
+    {
+        array_push($this->_currentConstants, $constant);
+    }
+
 
     /**#@-*/
 
@@ -164,20 +194,305 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
 
 
+    /**
+     * namespace_names
+     *
+     * @param mixed $params
+     */
+    private function namespace_name_1($params)
+    {
+        return $params[0];
+    }
 
+    private function namespace_name_2($params)
+    {
+        return implode('', $params);
+    }
+
+
+
+
+
+
+    /**
+     * common_scalars
+     *
+     * @param mixed $params
+     */
+    private function common_scalar_1($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_2($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_3($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_4($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_5($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_6($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_7($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_8($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_9($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_10($params)
+    {
+        return $params[0];
+    }
+
+    private function common_scalar_11($params)
+    {
+        return implode('', $params);
+    }
+
+    private function common_scalar_12($params)
+    {
+        return implode('', $params);
+    }
+
+
+
+
+    /**
+     * static_scalars
+     *
+     * @param mixed $params
+     */
+    private function static_scalar_1($params)
+    {
+        return $params[0];
+    }
+
+    private function static_scalar_2($params)
+    {
+        return $params[0];
+    }
+
+    private function static_scalar_3($params)
+    {
+        return implode('', $params);
+    }
+
+    private function static_scalar_4($params)
+    {
+        return implode('', $params);
+    }
+
+    private function static_scalar_5($params)
+    {
+        return '+' . $params[1];
+    }
+
+    private function static_scalar_6($params)
+    {
+        return '-' . $params[1];
+    }
+
+    private function static_scalar_7($params)
+    {
+        return $params[2];
+    }
+
+    private function static_scalar_8($params)
+    {
+        return $params[0];
+    }
+
+
+
+    /**
+     * static_class_constant
+     *
+     * @param mixed $params
+     */
+    private function static_class_constant_1($params)
+    {
+        return $params;
+    }
+
+
+
+
+    /**
+     * static_array_pair_lists
+     *
+     * @param mixed $params
+     */
+    private function static_array_pair_list_1($params)
+    {
+        return $params;
+    }
+
+    private function static_array_pair_list_2($params)
+    {
+        return $params[0];
+    }
+
+
+
+    /**
+     * non_empty_static_array_pair_lists
+     *
+     * @param mixed $params
+     */
+    private function non_empty_static_array_pair_list_1($params)
+    {
+        array_push($params[0], array($params[2], $params[3], $params[4]));
+        return $params[0];
+    }
+
+    private function non_empty_static_array_pair_list_2($params)
+    {
+        array_push($params[0], $params[2]);
+        return $params[0];
+    }
+
+    private function non_empty_static_array_pair_list_3($params)
+    {
+        return array($params);
+    }
+
+    private function non_empty_static_array_pair_list_4($params)
+    {
+        return array($params[0]);
+    }
+
+
+
+
+
+    /**
+     * class names
+     *
+     * @param mixed $params
+     */
+    private function class_name_1($params)
+    {
+        return $params[0];
+    }
+
+    private function class_name_2($params)
+    {
+        return $params[0];
+    }
+
+    private function class_name_3($params)
+    {
+        return implode('', $params);
+    }
+
+    private function class_name_4($params)
+    {
+        return implode('', $params);
+    }
+
+
+
+
+    /**
+     * declar a class.
+     *
+     * @param mixed $params
+     */
     private function unticked_class_declaration_statement_1($params)
     {
         $className = $params[1]->getValue();
-        $this->addClass(new Stagehand_Class($className));
+        $class = new Stagehand_Class($className);
+
+        foreach ($this->getCurrentConstants() as $constant) {
+            $class->addConstant($constant);
+        }
+
+        $this->addClass($class);
 
         return parent::execute(__FUNCTION__, $params);
     }
 
     private function unticked_class_declaration_statement_2($params)
     {
-        var_dump($params[1]);
+/*         var_dump($params[1]); */
         return parent::execute(__FUNCTION__, $params);
     }
+
+
+
+
+    /**
+     * declar a class constant.
+     *
+     * @param mixed $params
+     */
+    private function class_constant_declaration_1($params)
+    {
+        $this->_declar_class_constant($params[2], $params[4]);
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    private function class_constant_declaration_2($params)
+    {
+        $this->_declar_class_constant($params[1], $params[3]);
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    private function _declar_class_constant($nameToken, $valueToken)
+    {
+        $name  = $nameToken->getValue();
+        $constant = new Stagehand_Class_Constant($name);
+
+        if (is_array($valueToken)) {
+            $value = null;
+            foreach ($valueToken as $param) {
+                if ($param instanceof Stagehand_PHP_Lexer_Token) {
+                    $value .= $param->getValue();
+                } else {
+                    throw new Stagehand_Class_Parser_Exception('Arrays are not allowed in class constants');
+                }
+            }
+            $constant->setValue($value, true);
+
+        } elseif ($valueToken instanceof Stagehand_PHP_Lexer_Token) {
+            $value = $valueToken->getValue();
+            if (preg_match("/^'(.*)'$/", $value, $matches)) {
+                $value = $matches[1];
+            }
+            $constant->setValue($value);
+
+        } else {
+            throw new Stagehand_Class_Parser_Exception('Syntax error in class constants');
+        }
+
+        $this->addCurrentConstant($constant);
+    }
+
 
     /**#@-*/
 

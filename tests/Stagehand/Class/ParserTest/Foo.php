@@ -48,12 +48,16 @@
  */
 class Stagehand_Class_ParserTest_Foo
 {
-
-    // {{{ properties
+    const number = 10;
+    const string = 'example';
+    const namespace = Foo::A;
+    const entryFoo = 20, entryBar = 30;
 
     /**#@+
      * @access public
      */
+
+    public $foo;
 
     /**#@-*/
 
@@ -61,11 +65,15 @@ class Stagehand_Class_ParserTest_Foo
      * @access protected
      */
 
+    protected $_bar;
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    private $_baz;
 
     /**#@-*/
 
@@ -80,17 +88,43 @@ class Stagehand_Class_ParserTest_Foo
     {
     }
 
+    /**
+     * getFoo()
+     */
+    public function getFoo()
+    {
+        return $foo;
+    }
+
     /**#@-*/
 
     /**#@+
      * @access protected
      */
 
+    /**
+     * isBar()
+     */
+    private function isBar()
+    {
+        return $this->_bar ? true : false;
+    }
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    /**
+     * setBaz()
+     */
+    private function setBaz($baz)
+    {
+        if ($baz) {
+            $this->_baz = $baz;
+        }
+    }
 
     /**#@-*/
 

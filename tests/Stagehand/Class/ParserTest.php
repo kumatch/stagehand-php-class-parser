@@ -80,7 +80,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function parse()
+    public function parseConstants()
     {
         $filename = dirname(__FILE__) . '/ParserTest/Foo.php';
 
@@ -89,6 +89,24 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertType('Stagehand_Class', $class);
         $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Foo');
+        $this->assertFalse($class->isAbstract());
+        $this->assertFalse($class->isInterface());
+
+        $constants = $class->getConstants();
+
+        $this->assertEquals(count($constants), 5);
+
+        $this->assertEquals($constants['number']->getValue(), 10);
+        $this->assertEquals($constants['string']->getValue(), 'example');
+        $this->assertEquals($constants['namespace']->getValue(), 'Foo::A');
+        $this->assertEquals($constants['entryFoo']->getValue(), 20);
+        $this->assertEquals($constants['entryBar']->getValue(), 30);
+
+        $this->assertFalse($constants['number']->isParsable());
+        $this->assertFalse($constants['string']->isParsable());
+        $this->assertTrue($constants['namespace']->isParsable());
+        $this->assertFalse($constants['entryFoo']->isParsable());
+        $this->assertFalse($constants['entryBar']->isParsable());
     }
 
     /**#@-*/
