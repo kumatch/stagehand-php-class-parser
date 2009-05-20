@@ -797,9 +797,17 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_variable_declaration_1($params)
     {
-        return array($params[0],
-                     $this->class_variable_declaration_3(array($params[2]))
-                     );
+        if (is_array($params[0])) {
+            $variableDeclarations = $params[0];
+        } else {
+            $variableDeclarations = array($params[0]);
+        }
+
+        array_push($variableDeclarations,
+                   $this->class_variable_declaration_3(array($params[2]))
+                   );
+
+        return $variableDeclarations;
     }
 
     /**
@@ -808,13 +816,17 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_variable_declaration_2($params)
     {
-        return array($params[0],
-                     $this->class_variable_declaration_4(array($params[2],
-                                                               $params[3],
-                                                               $params[4],
-                                                               )
-                                                         )
-                     );
+        if (is_array($params[0])) {
+            $variableDeclarations = $params[0];
+        } else {
+            $variableDeclarations = array($params[0]);
+        }
+
+        array_push($variableDeclarations,
+                   $this->class_variable_declaration_4(array($params[2], $params[3], $params[4]))
+                   );
+
+        return $variableDeclarations;
     }
 
     /**

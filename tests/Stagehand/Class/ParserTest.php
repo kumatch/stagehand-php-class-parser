@@ -104,7 +104,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $constants = $class->getConstants();
 
-        $this->assertEquals(count($constants), 5);
+        $this->assertEquals(count($constants), 8);
 
         $this->assertEquals($constants['number']->getValue(), 10);
         $this->assertEquals($constants['string']->getValue(), 'example');
@@ -128,7 +128,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $properties = $class->getProperties();
 
-        $this->assertEquals(count($properties), 16);
+        $this->assertEquals(count($properties), 24);
 
         $this->assertNull($properties['foo']->getValue());
         $this->assertEquals($properties['bar']->getValue(), 100);

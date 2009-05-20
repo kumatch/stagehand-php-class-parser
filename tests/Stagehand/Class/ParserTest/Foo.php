@@ -52,6 +52,7 @@ class Stagehand_Class_ParserTest_Foo
     const string = 'example';
     const namespace = Foo::A;
     const entryFoo = 20, entryBar = 30;
+    const entryBaz = 40, entryQux = 50, entryQuux = 60;
     // const $dummy1 = 100;
     /* const $dummy2 = 200; */
 
@@ -71,6 +72,9 @@ class Stagehand_Class_ParserTest_Foo
     public $e, $f = 'f';
     public $g = 'g', $h = 'h';
     public static $i, $j = 'j';
+
+    public $aa, $aaa, $aaaa, $aaaaa;
+    public $bb = 10, $bbb = 20, $bbbb = 30, $bbbbb = 40;
     
     /**#@-*/
 
