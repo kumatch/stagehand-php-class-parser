@@ -52,13 +52,26 @@ class Stagehand_Class_ParserTest_Foo
     const string = 'example';
     const namespace = Foo::A;
     const entryFoo = 20, entryBar = 30;
+    // const $dummy1 = 100;
+    /* const $dummy2 = 200; */
 
     /**#@+
      * @access public
      */
 
     public $foo;
+    public static $bar = 100;
+    var $baz = 'BAZ';
+    public $qux = Foo::A;
+    // public $dummy1;
+    /* public $dummy2; */
 
+    public $a, $b;
+    public $c = 'c', $d;
+    public $e, $f = 'f';
+    public $g = 'g', $h = 'h';
+    public static $i, $j = 'j';
+    
     /**#@-*/
 
     /**#@+

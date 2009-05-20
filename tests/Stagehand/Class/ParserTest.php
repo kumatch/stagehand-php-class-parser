@@ -119,6 +119,57 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($constants['entryBar']->isParsable());
     }
 
+    /**
+     * @test
+     */
+    public function parseAllPropertiesOfAClass()
+    {
+        $class = Stagehand_Class_Parser::parse($this->_filename);
+
+        $properties = $class->getProperties();
+
+        $this->assertEquals(count($properties), 16);
+
+        $this->assertNull($properties['foo']->getValue());
+        $this->assertEquals($properties['bar']->getValue(), 100);
+        $this->assertEquals($properties['baz']->getValue(), 'BAZ');
+        $this->assertEquals($properties['qux']->getValue(), 'Foo::A');
+
+        $this->assertNull($properties['a']->getValue());
+        $this->assertNull($properties['b']->getValue());
+        $this->assertEquals($properties['c']->getValue(), 'c');
+        $this->assertNull($properties['d']->getValue());
+        $this->assertNull($properties['e']->getValue());
+        $this->assertEquals($properties['f']->getValue(), 'f');
+        $this->assertEquals($properties['g']->getValue(), 'g');
+        $this->assertEquals($properties['h']->getValue(), 'h');
+        $this->assertNull($properties['i']->getValue());
+        $this->assertEquals($properties['j']->getValue(), 'j');
+
+        $this->assertTrue($properties['foo']->isPublic());
+        $this->assertTrue($properties['bar']->isPublic());
+        $this->assertTrue($properties['bar']->isStatic());
+        $this->assertTrue($properties['baz']->isPublic());
+        $this->assertTrue($properties['qux']->isPublic());
+        $this->assertTrue($properties['_bar']->isProtected());
+        $this->assertTrue($properties['_baz']->isPrivate());
+
+        $this->assertTrue($properties['a']->isPublic());
+        $this->assertTrue($properties['b']->isPublic());
+        $this->assertTrue($properties['c']->isPublic());
+        $this->assertTrue($properties['d']->isPublic());
+        $this->assertTrue($properties['e']->isPublic());
+        $this->assertTrue($properties['f']->isPublic());
+        $this->assertTrue($properties['g']->isPublic());
+        $this->assertTrue($properties['h']->isPublic());
+        $this->assertTrue($properties['i']->isPublic());
+        $this->assertTrue($properties['i']->isStatic());
+        $this->assertTrue($properties['j']->isPublic());
+        $this->assertTrue($properties['j']->isStatic());
+
+
+    }
+
     /**#@-*/
 
     /**#@+
