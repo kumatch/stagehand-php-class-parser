@@ -108,7 +108,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($constants['number']->getValue(), 10);
         $this->assertEquals($constants['string']->getValue(), 'example');
-        $this->assertEquals($constants['namespace']->getValue(), 'Foo::A');
+        $this->assertEquals($constants['namespace']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
         $this->assertEquals($constants['entryFoo']->getValue(), 20);
         $this->assertEquals($constants['entryBar']->getValue(), 30);
 
@@ -128,12 +128,13 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $properties = $class->getProperties();
 
-        $this->assertEquals(count($properties), 24);
+        $this->assertEquals(count($properties), 25);
 
         $this->assertNull($properties['foo']->getValue());
         $this->assertEquals($properties['bar']->getValue(), 100);
         $this->assertEquals($properties['baz']->getValue(), 'BAZ');
-        $this->assertEquals($properties['qux']->getValue(), 'Foo::A');
+        $this->assertEquals($properties['qux']->getValue(), array(1, 5, 10));
+        $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
 
         $this->assertNull($properties['a']->getValue());
         $this->assertNull($properties['b']->getValue());
@@ -166,8 +167,131 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($properties['i']->isStatic());
         $this->assertTrue($properties['j']->isPublic());
         $this->assertTrue($properties['j']->isStatic());
+    }
 
+    /**
+     * @test
+     */
+    public function parseAllMethodsOfAClass()
+    {
+        $class = Stagehand_Class_Parser::parse($this->_filename);
 
+        $methods = $class->getMethods();
+
+        $this->assertEquals(count($methods), 8);
+
+        $this->assertTrue($methods['__construct']->isPublic());
+        $this->assertFalse($methods['__construct']->isStatic());
+        $this->assertFalse($methods['__construct']->isFinal());
+        $this->assertFalse($methods['__construct']->isReference());
+        $this->assertNull($methods['__construct']->getCode());
+        $this->assertEquals(count($methods['__construct']->getArguments()), 0);
+
+        $this->assertTrue($methods['reference']->isPublic());
+        $this->assertFalse($methods['reference']->isStatic());
+        $this->assertFalse($methods['reference']->isFinal());
+        $this->assertTrue($methods['reference']->isReference());
+        $this->assertEquals($methods['reference']->getCode(), <<<REFERENCE_METHOD_CODE
+\$result = \$foo + 1;
+return \$result;
+REFERENCE_METHOD_CODE
+);
+
+        $referenceArguments = $methods['reference']->getArguments();
+
+        $this->assertEquals(count($referenceArguments), 1);
+        $this->assertNull($referenceArguments['foo']->getValue());
+        $this->assertTrue($referenceArguments['foo']->isRequired());
+
+        $this->assertTrue($methods['someArguments']->isPublic());
+        $this->assertFalse($methods['someArguments']->isStatic());
+        $this->assertFalse($methods['someArguments']->isFinal());
+        $this->assertFalse($methods['someArguments']->isReference());
+        $this->assertNull($methods['someArguments']->getCode());
+
+        $someArguments = $methods['someArguments']->getArguments();
+
+        $this->assertEquals(count($someArguments), 8);
+
+        $this->assertNull($someArguments['a']->getValue());
+        $this->assertNull($someArguments['b']->getValue());
+        $this->assertNull($someArguments['c']->getValue());
+        $this->assertEquals($someArguments['d']->getValue(), 10);
+        $this->assertEquals($someArguments['e']->getValue(), 'EEE');
+        $this->assertEquals($someArguments['f']->getValue(), array(1, 3, 5));
+        $this->assertNull($someArguments['g']->getValue());
+        $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
+
+        $this->assertTrue($someArguments['a']->isRequired());
+        $this->assertTrue($someArguments['b']->isRequired());
+        $this->assertTrue($someArguments['c']->isRequired());
+        $this->assertFalse($someArguments['d']->isRequired());
+        $this->assertFalse($someArguments['e']->isRequired());
+        $this->assertFalse($someArguments['f']->isRequired());
+        $this->assertFalse($someArguments['g']->isRequired());
+        $this->assertFalse($someArguments['h']->isRequired());
+
+        $this->assertFalse($someArguments['a']->isParsable());
+        $this->assertFalse($someArguments['b']->isParsable());
+        $this->assertFalse($someArguments['c']->isParsable());
+        $this->assertFalse($someArguments['d']->isParsable());
+        $this->assertFalse($someArguments['e']->isParsable());
+        $this->assertFalse($someArguments['f']->isParsable());
+        $this->assertFalse($someArguments['g']->isParsable());
+        $this->assertTrue($someArguments['h']->isParsable());
+
+        $this->assertTrue($someArguments['a']->isReference());
+        $this->assertFalse($someArguments['b']->isReference());
+        $this->assertFalse($someArguments['c']->isReference());
+        $this->assertFalse($someArguments['d']->isReference());
+        $this->assertFalse($someArguments['e']->isReference());
+        $this->assertFalse($someArguments['f']->isReference());
+        $this->assertFalse($someArguments['g']->isReference());
+        $this->assertFalse($someArguments['h']->isReference());
+
+        $this->assertNull($someArguments['a']->getTypeHinting());
+        $this->assertEquals($someArguments['b']->getTypeHinting(), 'array');
+        $this->assertEquals($someArguments['c']->getTypeHinting(), 'stdclass');
+        $this->assertNull($someArguments['d']->getTypeHinting());
+        $this->assertNull($someArguments['e']->getTypeHinting());
+        $this->assertNull($someArguments['f']->getTypeHinting());
+        $this->assertNull($someArguments['g']->getTypeHinting());
+        $this->assertNull($someArguments['h']->getTypeHinting());
+
+        $this->assertTrue($methods['staticMethod']->isPublic());
+        $this->assertTrue($methods['staticMethod']->isStatic());
+        $this->assertFalse($methods['staticMethod']->isFinal());
+
+        $this->assertTrue($methods['finalMethod']->isPublic());
+        $this->assertFalse($methods['finalMethod']->isStatic());
+        $this->assertTrue($methods['finalMethod']->isFinal());
+
+        $this->assertTrue($methods['protectedMethod']->isProtected());
+        $this->assertFalse($methods['protectedMethod']->isStatic());
+        $this->assertFalse($methods['protectedMethod']->isFinal());
+        $this->assertEquals($methods['protectedMethod']->getCode(),
+                            'return $this->_bar ? true : false;'
+                            );
+
+        $this->assertTrue($methods['finalStaticProtectedMethod']->isProtected());
+        $this->assertTrue($methods['finalStaticProtectedMethod']->isStatic());
+        $this->assertTrue($methods['finalStaticProtectedMethod']->isFinal());
+
+        $this->assertTrue($methods['privateMethod']->isPrivate());
+        $this->assertFalse($methods['privateMethod']->isStatic());
+        $this->assertFalse($methods['privateMethod']->isFinal());
+        $this->assertEquals($methods['privateMethod']->getCode(), <<<PRIVATE_METHOD_CODE
+if (\$baz) {
+    \$this->_baz = \$baz;
+}
+PRIVATE_METHOD_CODE
+);
+
+        $class->setName('Dummy');
+        $class->load();
+        $dummy = new Dummy();
+
+        $this->assertEquals($dummy->reference(10), 11);
     }
 
     /**#@-*/

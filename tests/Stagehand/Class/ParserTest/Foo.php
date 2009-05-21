@@ -50,7 +50,7 @@ class Stagehand_Class_ParserTest_Foo
 {
     const number = 10;
     const string = 'example';
-    const namespace = Foo::A;
+    const namespace = Stagehand_Class_ParserTest_Foo::number;
     const entryFoo = 20, entryBar = 30;
     const entryBaz = 40, entryQux = 50, entryQuux = 60;
     // const $dummy1 = 100;
@@ -63,7 +63,8 @@ class Stagehand_Class_ParserTest_Foo
     public $foo;
     public static $bar = 100;
     var $baz = 'BAZ';
-    public $qux = Foo::A;
+    public $qux = array(1, 5, 10);
+    public $quux = Stagehand_Class_ParserTest_Foo::number;
     // public $dummy1;
     /* public $dummy2; */
 
@@ -106,11 +107,35 @@ class Stagehand_Class_ParserTest_Foo
     }
 
     /**
-     * getFoo()
+     * reference()
      */
-    public function getFoo()
+    public function &reference($foo)
     {
-        return $foo;
+        $result = $foo + 1;
+        return $result;
+    }
+
+    /**
+     * someArguments()
+     */
+    public function someArguments(&$a, array $b, stdClass $c,
+                                  $d = 10, $e = 'EEE', $f = array(1, 3, 5),
+                                  $g = null, $h = Stagehand_Class_ParserTest_Foo::number)
+    {
+    }
+
+    /**
+     * staticMethod()
+     */
+    public static function staticMethod()
+    {
+    }
+
+    /**
+     * finalMethod()
+     */
+    final public function finalMethod()
+    {
     }
 
     /**#@-*/
@@ -120,11 +145,18 @@ class Stagehand_Class_ParserTest_Foo
      */
 
     /**
-     * isBar()
+     * protectedMethod()
      */
-    private function isBar()
+    protected function protectedMethod()
     {
         return $this->_bar ? true : false;
+    }
+
+    /**
+     * finalStaticProtectedMethod()
+     */
+    final protected static function finalStaticProtectedMethod()
+    {
     }
 
     /**#@-*/
@@ -134,9 +166,9 @@ class Stagehand_Class_ParserTest_Foo
      */
 
     /**
-     * setBaz()
+     * privateMethod()
      */
-    private function setBaz($baz)
+    private function privateMethod($baz)
     {
         if ($baz) {
             $this->_baz = $baz;

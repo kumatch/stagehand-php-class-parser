@@ -71,6 +71,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
     private $_currentConstants = array();
     private $_currentProperties = array();
+    private $_currentMethods = array();
 
     /**#@-*/
 
@@ -174,6 +175,32 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     public function addCurrentProperty(Stagehand_Class_Property $property)
     {
         array_push($this->_currentProperties, $property);
+    }
+
+    // }}}
+    // {{{ getCurrentMethods()
+
+    /**
+     * Gets all current methods.
+     *
+     * @return array
+     */
+    public function getCurrentMethods()
+    {
+        return $this->_currentMethods;
+    }
+
+    // }}}
+    // {{{ addCurrentMethod
+
+    /**
+     * Adds a current method.
+     *
+     * @param Stagehand_Class_Method $method
+     */
+    public function addCurrentMethod(Stagehand_Class_Method $method)
+    {
+        array_push($this->_currentMethods, $method);
     }
 
 
@@ -461,7 +488,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_array_pair_list_1($params)
     {
-        return $params;
+        return new ArrayObject();
+/*         return $params; */
     }
 
     /**
@@ -470,9 +498,13 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_array_pair_list_2($params)
     {
-        return $params[0];
-    }
+        $list = new ArrayObject();
+        foreach ($params[0] as $param) {
+            $list->append($param->getValue());
+        }
 
+        return $list;
+    }
 
 
     /**
@@ -573,6 +605,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
             $class->addProperty($property);
         }
 
+        foreach ($this->getCurrentMethods() as $method) {
+            $class->addMethod($method);
+        }
+
         $this->addClass($class);
 
         return parent::execute(__FUNCTION__, $params);
@@ -660,28 +696,11 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         }
 
         foreach ($variableDeclarations as $property) {
-            foreach ($variableModifiers as $variableModifier) {
-                switch (strtolower($variableModifier->getValue())) {
-                case 'public':
-                case 'var':
-                    $property->definePublic();
-                    break;
-                case 'protected':
-                    $property->defineProtected();
-                    break;
-                case 'private':
-                    $property->definePrivate();
-                    break;
-                case 'static':
-                    $property->defineStatic();
-                    break;
-                default:
-                    break;
-                }
-            }
-
+            $this->_setModifiers($property, $variableModifiers);
             $this->addCurrentProperty($property);
         }
+
+        return parent::execute(__FUNCTION__, $params);
     }
 
     /**
@@ -699,8 +718,33 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_statement_3($params)
     {
-/*         var_dump('class_statement_3'); */
-/*         var_dump($params); */
+        if (is_array($params[0])) {
+            $methodModifiers = $params[0];
+        } else {
+            $methodModifiers = array($params[0]);
+        }
+
+        $isReference   = $params[2] ? true : false;
+        $methodName    = $params[3]->getValue();
+        $parameterList = $params[5];
+        $methodBody    = $params[7] ? $params[7] : null;
+
+        $method = new Stagehand_Class_Method($methodName);
+        $method->setCode($methodBody);
+
+        if ($isReference) {
+            $method->setReference();
+        }
+
+        if ($parameterList) {
+            foreach ($parameterList as $argument) {
+                $method->addArgument($argument);
+            }
+        }
+
+        $this->_setModifiers($method, $methodModifiers);
+        $this->addCurrentMethod($method);
+
         return parent::execute(__FUNCTION__, $params);
     }
 
@@ -747,7 +791,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function non_empty_member_modifiers_2($params)
     {
-        return array($params[0], $params[1]);
+        if (is_array($params[0])) {
+            array_push($params[0], $params[1]);
+            return $params[0];
+        } else {
+            return array($params[0], $params[1]);
+        }
     }
 
 
@@ -850,15 +899,11 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $name = $this->_getVariableName($params[0]->getValue());
         $property = new Stagehand_Class_Property($name);
 
-        if (is_array($params[2])) {
-            $value = null;
-            foreach ($params[2] as $param) {
-                $value .= $param->getValue();
-            }
-            $property->setValue($value, true);
+        $value = $this->_getStaticScalarValue($params[2]);
 
+        if (is_array($params[2])) {
+            $property->setValue($value, true);
         } else {
-            $value = $this->_getVariableValue($params[2]->getValue());
             $property->setValue($value);
         }
 
@@ -866,6 +911,330 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     }
 
 
+
+
+
+    /**
+     * method_modifiers_1
+     *    // empty
+     */
+    protected function method_modifiers_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * method_modifiers_2
+     *    non_empty_member_modifiers
+     */
+    protected function method_modifiers_2($params)
+    {
+        return $params[0];
+    }
+
+
+
+    /**
+     * function_1
+     *    T_FUNCTION
+     */
+    protected function function_1($params)
+    {
+        return $params[0];
+    }
+
+
+    /**
+     * is_reference_1
+     *    // empty
+     */
+    protected function is_reference_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * is_reference_2
+     *    // empty
+     */
+    protected function is_reference_2($params)
+    {
+        return $params[0];
+    }
+
+
+
+
+    /**
+     * parameter_list_1
+     *    non_empty_parameter_list
+     */
+    protected function parameter_list_1($params)
+    {
+        return $params[0];
+    }
+
+    /**
+     * parameter_list_2
+     *    // empty
+     */
+    protected function parameter_list_2($params)
+    {
+        return null;
+    }
+
+
+
+
+    /**
+     * non_empty_parameter_list_1
+     *    optional_class_type T_VARIABLE
+     */
+    protected function non_empty_parameter_list_1($params)
+    {
+        $name = preg_replace('/^\$/', '', $params[1]->getValue());
+        $argument = new Stagehand_Class_Method_Argument($name);
+        $argument->setRequirement(true);
+
+        if ($params[0]) {
+            $argument->setTypeHinting($params[0]->getValue());
+        }
+
+        return array($argument);
+    }
+
+    /**
+     * non_empty_parameter_list_2
+     *    optional_class_type '&' T_VARIABLE
+     */
+    protected function non_empty_parameter_list_2($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[0], $params[2]));
+        $arguments[0]->setReference();
+
+        return $arguments;
+    }
+
+    /**
+     * non_empty_parameter_list_3
+     *    optional_class_type '&' T_VARIABLE '=' static_scalar
+     */
+    protected function non_empty_parameter_list_3($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[0], $params[2]));
+        $arguments[0]->setReference();
+        $arguments[0]->setValue($params[4]->getValue());
+        $arguments[0]->setRequirement(false);
+
+        return $arguments;
+    }
+
+    /**
+     * non_empty_parameter_list_4
+     *    optional_class_type T_VARIABLE '=' static_scalar
+     */
+    protected function non_empty_parameter_list_4($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[0], $params[1]));
+        $arguments[0]->setReference();
+        $arguments[0]->setValue($params[3]->getValue());
+        $arguments[0]->setRequirement(false);
+
+        return $arguments;
+    }
+
+    /**
+     * non_empty_parameter_list_5
+     *    non_empty_parameter_list ',' optional_class_type T_VARIABLE
+     */
+    protected function non_empty_parameter_list_5($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[3]));
+        array_push($params[0], $arguments[0]);
+
+        return $params[0];
+    }
+
+    /**
+     * non_empty_parameter_list_6
+     *    non_empty_parameter_list ',' optional_class_type '&' T_VARIABLE
+     */
+    protected function non_empty_parameter_list_6($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[4]));
+        $arguments[0]->setReference();
+        array_push($params[0], $arguments[0]);
+
+        return $params[0];
+    }
+
+    /**
+     * non_empty_parameter_list_7
+     *    non_empty_parameter_list ',' optional_class_type '&' T_VARIABLE '=' static_scalar
+     */
+    protected function non_empty_parameter_list_7($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[4]));
+        $arguments[0]->setReference();
+        $arguments[0]->setValue($params[6]->getValue());
+        $arguments[0]->setRequirement(false);
+        array_push($params[0], $arguments[0]);
+
+        return $params[0];
+    }
+
+    /**
+     * non_empty_parameter_list_8
+     *    non_empty_parameter_list ',' optional_class_type T_VARIABLE '=' static_scalar
+     */
+    protected function non_empty_parameter_list_8($params)
+    {
+        $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[3]));
+
+        $value = $this->_getStaticScalarValue($params[5]);
+        $arguments[0]->setRequirement(false);
+        if (is_array($params[5])) {
+            $arguments[0]->setValue($value, true);
+        } else {
+            $arguments[0]->setValue($value);
+        }
+
+        array_push($params[0], $arguments[0]);
+
+        return $params[0];
+    }
+
+
+
+
+
+
+
+    /**
+     * optional_class_type_1
+     *    // empty
+     */
+    protected function optional_class_type_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * optional_class_type_2
+     *    fully_qualified_class_name
+     */
+    protected function optional_class_type_2($params)
+    {
+        return $params[0];
+    }
+
+    /**
+     * optional_class_type_3
+     *    T_ARRAY
+     */
+    protected function optional_class_type_3($params)
+    {
+        return $params[0];
+    }
+
+
+
+
+
+    /**
+     * fully_qualified_class_name_1
+     *    namespace_name
+     */
+    protected function fully_qualified_class_name_1($params)
+    {
+        return $params[0];
+    }
+
+    /**
+     * fully_qualified_class_name_2
+     *    T_NAMESPACE T_NS_SEPARATOR namespace_name
+     */
+    protected function fully_qualified_class_name_2($params)
+    {
+        return implode('', $params);
+    }
+
+    /**
+     * fully_qualified_class_name_3
+     *    T_NS_SEPARATOR namespace_name
+     */
+    protected function fully_qualified_class_name_3($params)
+    {
+        return implode('', $params);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * method_body_1
+     *    ';' // abstract method
+     */
+    protected function method_body_1($params)
+    {
+        return $params[0];
+    }
+
+    /**
+     * method_body_2
+     *    '{' inner_statement_list '}'
+     */
+    protected function method_body_2($params)
+    {
+        $lex = $this->getParser()->lex;
+        $codeTokens = $lex->getTokens($params[0]->getPosition() + 1,
+                                      $params[2]->getPosition() - 1
+                                      );
+
+        $indent = null;
+        if (is_array($codeTokens[0])
+            && token_name($codeTokens[0][0]) === 'T_WHITESPACE'
+            ) {
+            $token = array_shift($codeTokens);
+
+            foreach (explode("\n", preg_replace("/\r\n/", "\n", $token[1])) as $line) {
+                if (preg_match('/^[\s]+$/', $line)
+                    && strlen($line) >strlen($indent)) {
+                    $indent = $line;
+                }
+            }
+        }
+
+        if (!$count = count($codeTokens)) {
+            return null;
+        }
+
+        $lastToken = end($codeTokens);
+        if (is_array($lastToken)
+            && token_name($lastToken[0]) === 'T_WHITESPACE'
+            ) {
+            array_pop($codeTokens);
+        }
+
+        $code = null;
+        foreach ($codeTokens as $token) {
+            $code .= is_array($token) ? $token[1] : $token;
+        }
+
+        $indentedCode = null;
+        foreach (explode("\n", preg_replace("/\r\n/", "\n", $code)) as $line) {
+            if ($indentedCode) {
+                $indentedCode .= "\n";
+            }
+            $indentedCode .= preg_replace("/^{$indent}/", '', $line);
+        }
+
+        return $indentedCode;
+    }
 
 
 
@@ -886,6 +1255,51 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         return $value;
     }
 
+    protected function _getStaticScalarValue($scalar)
+    {
+        if (is_array($scalar)) {
+            $value = null;
+            foreach ($scalar as $param) {
+                $value .= $param->getValue();
+            }
+        } elseif ($scalar instanceof ArrayObject) {
+            $value = (array)$scalar;
+        } else {
+            if (($scalar->getValue() === 'null')) {
+                $value = null;
+            } else {
+                $value = $this->_getVariableValue($scalar->getValue());
+            }
+        }
+
+        return $value;
+    }
+
+    protected function _setModifiers(&$declar, $modifiers)
+    {
+        foreach ($modifiers as $modifier) {
+            switch (strtolower($modifier->getValue())) {
+            case 'public':
+            case 'var':
+                $declar->definePublic();
+                break;
+            case 'protected':
+                $declar->defineProtected();
+                break;
+            case 'private':
+                $declar->definePrivate();
+                break;
+            case 'static':
+                $declar->defineStatic();
+                break;
+            case 'final':
+                $declar->defineFinal();
+                break;
+            default:
+                break;
+            }
+        }
+    }
 
     /**#@-*/
 
