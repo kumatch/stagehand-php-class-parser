@@ -268,7 +268,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function namespace_name_1($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -277,7 +277,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function namespace_name_2($params)
     {
-        return implode('', $params);
+        return array($params[0],
+                     $params[1]->getValue(),
+                     $params[2]->getValue(),
+                     );                     
     }
 
 
@@ -291,7 +294,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_1($params)
     {
-        return $params[0];
+        $scalar = $params[0]->getValue();
+        return (int)$scalar;
     }
 
     /**
@@ -300,7 +304,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_2($params)
     {
-        return $params[0];
+        $scalar = $params[0]->getValue();
+        return (float)$scalar;
     }
 
     /**
@@ -309,7 +314,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_3($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -318,7 +323,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_4($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -327,7 +332,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_5($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -336,7 +341,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_6($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -345,7 +350,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_7($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -354,7 +359,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_8($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -363,7 +368,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_9($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -372,7 +377,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_10($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -381,7 +386,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_11($params)
     {
-        return implode('', $params);
+        return array($params[0],
+                     $params[1]->getValue(),
+                     $params[2]->getValue(),
+                     );
     }
 
     /**
@@ -390,7 +398,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function common_scalar_12($params)
     {
-        return implode('', $params);
+        return array($params[0],
+                     $params[1]->getValue(),
+                     );
     }
 
 
@@ -420,7 +430,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_scalar_3($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1]->getValue(),
+                     $params[2],
+                     );
     }
 
     /**
@@ -429,7 +442,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_scalar_4($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1],
+                     );
     }
 
     /**
@@ -476,7 +491,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_class_constant_1($params)
     {
-        return $params;
+        return array($params[0],
+                     $params[1]->getValue(),
+                     $params[2]->getValue(),
+                     );
     }
 
 
@@ -489,7 +507,6 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function static_array_pair_list_1($params)
     {
         return new ArrayObject();
-/*         return $params; */
     }
 
     /**
@@ -500,7 +517,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         $list = new ArrayObject();
         foreach ($params[0] as $param) {
-            $list->append($param->getValue());
+            $list->append($param);
         }
 
         return $list;
@@ -555,7 +572,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_name_1($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     /**
@@ -573,7 +590,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_name_3($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1]->getValue(),
+                     $params[2],
+                     );
     }
 
     /**
@@ -582,7 +602,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_name_4($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1],
+                     );
     }
 
 
@@ -633,7 +655,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_constant_declaration_1($params)
     {
-        $this->_declar_class_constant($params[2], $params[4]);
+        $this->_declar_class_constant($params[2]->getValue(),
+                                      $params[4]
+                                      );
         return parent::execute(__FUNCTION__, $params);
     }
 
@@ -643,32 +667,21 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function class_constant_declaration_2($params)
     {
-        $this->_declar_class_constant($params[1], $params[3]);
+        $this->_declar_class_constant($params[1]->getValue(),
+                                      $params[3]
+                                      );
         return parent::execute(__FUNCTION__, $params);
     }
 
-    protected function _declar_class_constant($nameToken, $valueToken)
+    protected function _declar_class_constant($name, $scalar)
     {
-        $name  = $nameToken->getValue();
         $constant = new Stagehand_Class_Constant($name);
 
-        if (is_array($valueToken)) {
-            $value = null;
-            foreach ($valueToken as $param) {
-                if ($param instanceof Stagehand_PHP_Lexer_Token) {
-                    $value .= $param->getValue();
-                } else {
-                    throw new Stagehand_Class_Parser_Exception('Arrays are not allowed in class constants');
-                }
-            }
-            $constant->setValue($value, true);
-
-        } elseif ($valueToken instanceof Stagehand_PHP_Lexer_Token) {
-            $value = $this->_getVariableValue($valueToken->getValue());
-            $constant->setValue($value);
-
+        if (is_array($scalar)) {
+            $constant->setValue(implode('', $scalar), true);
         } else {
-            throw new Stagehand_Class_Parser_Exception('Syntax error in class constants');
+            $value = $this->_getVariableValue($scalar);
+            $constant->setValue($value);
         }
 
         $this->addCurrentConstant($constant);
@@ -771,7 +784,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function variable_modifiers_2($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
 
@@ -811,32 +824,32 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function member_modifier_1($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     protected function member_modifier_2($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     protected function member_modifier_3($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     protected function member_modifier_4($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     protected function member_modifier_5($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
     protected function member_modifier_6($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
 
@@ -899,12 +912,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $name = $this->_getVariableName($params[0]->getValue());
         $property = new Stagehand_Class_Property($name);
 
-        $value = $this->_getStaticScalarValue($params[2]);
-
         if (is_array($params[2])) {
-            $property->setValue($value, true);
+            $property->setValue(implode('', $params[2]), true);
         } else {
-            $property->setValue($value);
+            $property->setValue($this->_getStaticScalarValue($params[2]));
         }
 
         return $property;
@@ -940,7 +951,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function function_1($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
 
@@ -955,11 +966,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
     /**
      * is_reference_2
-     *    // empty
+     *    '&'
      */
     protected function is_reference_2($params)
     {
-        return $params[0];
+
+        return $params[0]->getValue();
     }
 
 
@@ -997,7 +1009,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $argument->setRequirement(true);
 
         if ($params[0]) {
-            $argument->setTypeHinting($params[0]->getValue());
+            $argument->setTypeHinting($params[0]);
         }
 
         return array($argument);
@@ -1091,14 +1103,13 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[3]));
 
-        $value = $this->_getStaticScalarValue($params[5]);
-        $arguments[0]->setRequirement(false);
         if (is_array($params[5])) {
-            $arguments[0]->setValue($value, true);
+            $arguments[0]->setValue(implode('', $params[5]), true);
         } else {
-            $arguments[0]->setValue($value);
+            $arguments[0]->setValue($this->_getStaticScalarValue($params[5]));
         }
 
+        $arguments[0]->setRequirement(false);
         array_push($params[0], $arguments[0]);
 
         return $params[0];
@@ -1134,7 +1145,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function optional_class_type_3($params)
     {
-        return $params[0];
+        return $params[0]->getValue();
     }
 
 
@@ -1156,7 +1167,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function fully_qualified_class_name_2($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1]->getValue(),
+                     $params[2],
+                     );
     }
 
     /**
@@ -1165,7 +1179,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function fully_qualified_class_name_3($params)
     {
-        return implode('', $params);
+        return array($params[0]->getValue(),
+                     $params[1],
+                     );
     }
 
 
@@ -1257,18 +1273,13 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
     protected function _getStaticScalarValue($scalar)
     {
-        if (is_array($scalar)) {
-            $value = null;
-            foreach ($scalar as $param) {
-                $value .= $param->getValue();
-            }
-        } elseif ($scalar instanceof ArrayObject) {
+        if ($scalar instanceof ArrayObject) {
             $value = (array)$scalar;
         } else {
-            if (($scalar->getValue() === 'null')) {
+            if (($scalar === 'null')) {
                 $value = null;
             } else {
-                $value = $this->_getVariableValue($scalar->getValue());
+                $value = $this->_getVariableValue($scalar);
             }
         }
 
@@ -1278,7 +1289,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function _setModifiers(&$declar, $modifiers)
     {
         foreach ($modifiers as $modifier) {
-            switch (strtolower($modifier->getValue())) {
+            switch (strtolower($modifier)) {
             case 'public':
             case 'var':
                 $declar->definePublic();

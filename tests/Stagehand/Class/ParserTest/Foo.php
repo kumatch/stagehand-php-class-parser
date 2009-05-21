@@ -64,7 +64,7 @@ class Stagehand_Class_ParserTest_Foo
     public static $bar = 100;
     var $baz = 'BAZ';
     public $qux = array(1, 5, 10);
-    public $quux = Stagehand_Class_ParserTest_Foo::number;
+    public $quux = Stagehand_Class_ParserTest_Foo::string;
     // public $dummy1;
     /* public $dummy2; */
 
@@ -120,7 +120,7 @@ class Stagehand_Class_ParserTest_Foo
      */
     public function someArguments(&$a, array $b, stdClass $c,
                                   $d = 10, $e = 'EEE', $f = array(1, 3, 5),
-                                  $g = null, $h = Stagehand_Class_ParserTest_Foo::number)
+                                  $g = null, $h = Stagehand_Class_ParserTest_Foo::namespace)
     {
     }
 

@@ -134,7 +134,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($properties['bar']->getValue(), 100);
         $this->assertEquals($properties['baz']->getValue(), 'BAZ');
         $this->assertEquals($properties['qux']->getValue(), array(1, 5, 10));
-        $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
+        $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_ParserTest_Foo::string');
 
         $this->assertNull($properties['a']->getValue());
         $this->assertNull($properties['b']->getValue());
@@ -220,7 +220,7 @@ REFERENCE_METHOD_CODE
         $this->assertEquals($someArguments['e']->getValue(), 'EEE');
         $this->assertEquals($someArguments['f']->getValue(), array(1, 3, 5));
         $this->assertNull($someArguments['g']->getValue());
-        $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
+        $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_ParserTest_Foo::namespace');
 
         $this->assertTrue($someArguments['a']->isRequired());
         $this->assertTrue($someArguments['b']->isRequired());
