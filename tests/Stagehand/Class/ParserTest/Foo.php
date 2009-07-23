@@ -115,9 +115,6 @@ class Stagehand_Class_ParserTest_Foo
         return $result;
     }
 
-    /**
-     * someArguments()
-     */
     public function someArguments(&$a, array $b, stdClass $c,
                                   $d = 10, $e = 'EEE', $f = array(1, 3, 5),
                                   $g = null, $h = Stagehand_Class_ParserTest_Foo::namespace)
@@ -170,6 +167,9 @@ class Stagehand_Class_ParserTest_Foo
      */
     private function privateMethod($baz)
     {
+        /**
+         * A document block in method.
+         */
         if ($baz) {
             $this->_baz = $baz;
         }

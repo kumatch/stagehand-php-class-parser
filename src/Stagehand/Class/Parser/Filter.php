@@ -619,6 +619,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $className = $params[1]->getValue();
         $class = new Stagehand_Class($className);
 
+        $lex = $this->getParser()->lex;
+        $docComment = $lex->getLatestDocComment();
+        if ($docComment) {
+            $class->setDocComment($docComment, true);
+        }
+
         foreach ($this->getCurrentConstants() as $constant) {
             $class->addConstant($constant);
         }
@@ -744,6 +750,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
         $method = new Stagehand_Class_Method($methodName);
         $method->setCode($methodBody);
+
+        $lex = $this->getParser()->lex;
+        $docComment = $lex->getLatestDocComment();
+        if ($docComment) {
+            $method->setDocComment($docComment, true);
+        }
 
         if ($isReference) {
             $method->setReference();

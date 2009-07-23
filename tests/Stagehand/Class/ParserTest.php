@@ -93,6 +93,15 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Foo');
         $this->assertFalse($class->isAbstract());
         $this->assertFalse($class->isInterface());
+        $this->assertEquals($class->getDocComment(),"/**
+ * A test class for Stagehand_Class_Parser
+ *
+ * @package    sh-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */");
     }
 
     /**
@@ -185,6 +194,9 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($methods['__construct']->isFinal());
         $this->assertFalse($methods['__construct']->isReference());
         $this->assertNull($methods['__construct']->getCode());
+        $this->assertEquals($methods['__construct']->getDocComment(), "/**
+     * __construct()
+     */");
         $this->assertEquals(count($methods['__construct']->getArguments()), 0);
 
         $this->assertTrue($methods['reference']->isPublic());
@@ -196,6 +208,9 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 return \$result;
 REFERENCE_METHOD_CODE
 );
+        $this->assertEquals($methods['reference']->getDocComment(), "/**
+     * reference()
+     */");
 
         $referenceArguments = $methods['reference']->getArguments();
 
@@ -208,6 +223,7 @@ REFERENCE_METHOD_CODE
         $this->assertFalse($methods['someArguments']->isFinal());
         $this->assertFalse($methods['someArguments']->isReference());
         $this->assertNull($methods['someArguments']->getCode());
+        $this->assertNull($methods['someArguments']->getDocComment());
 
         $someArguments = $methods['someArguments']->getArguments();
 
@@ -261,10 +277,16 @@ REFERENCE_METHOD_CODE
         $this->assertTrue($methods['staticMethod']->isPublic());
         $this->assertTrue($methods['staticMethod']->isStatic());
         $this->assertFalse($methods['staticMethod']->isFinal());
+        $this->assertNull($methods['someArguments']->getDocComment(), "/**
+     * staticMethod()
+     */");
 
         $this->assertTrue($methods['finalMethod']->isPublic());
         $this->assertFalse($methods['finalMethod']->isStatic());
         $this->assertTrue($methods['finalMethod']->isFinal());
+        $this->assertEquals($methods['finalMethod']->getDocComment() ,"/**
+     * finalMethod()
+     */");
 
         $this->assertTrue($methods['protectedMethod']->isProtected());
         $this->assertFalse($methods['protectedMethod']->isStatic());
@@ -272,20 +294,33 @@ REFERENCE_METHOD_CODE
         $this->assertEquals($methods['protectedMethod']->getCode(),
                             'return $this->_bar ? true : false;'
                             );
+        $this->assertEquals($methods['protectedMethod']->getDocComment(), "/**
+     * protectedMethod()
+     */");
 
         $this->assertTrue($methods['finalStaticProtectedMethod']->isProtected());
         $this->assertTrue($methods['finalStaticProtectedMethod']->isStatic());
         $this->assertTrue($methods['finalStaticProtectedMethod']->isFinal());
+        $this->assertEquals($methods['finalStaticProtectedMethod']->getDocComment(), "/**
+     * finalStaticProtectedMethod()
+     */");
 
         $this->assertTrue($methods['privateMethod']->isPrivate());
         $this->assertFalse($methods['privateMethod']->isStatic());
         $this->assertFalse($methods['privateMethod']->isFinal());
         $this->assertEquals($methods['privateMethod']->getCode(), <<<PRIVATE_METHOD_CODE
+/**
+ * A document block in method.
+ */
 if (\$baz) {
     \$this->_baz = \$baz;
 }
 PRIVATE_METHOD_CODE
 );
+        $this->assertEquals($methods['privateMethod']->getDocComment(), "/**
+     * privateMethod()
+     */");
+
 
         $class->setName('Dummy');
         $class->load();
