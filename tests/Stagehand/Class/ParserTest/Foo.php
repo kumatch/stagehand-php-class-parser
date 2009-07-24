@@ -60,14 +60,29 @@ class Stagehand_Class_ParserTest_Foo
      * @access public
      */
 
+    /**
+     * public foo
+     */
     public $foo;
+
+    /**
+     * public static bar
+     */
     public static $bar = 100;
+
+    /**
+     * var baz
+     */
     var $baz = 'BAZ';
+
     public $qux = array(1, 5, 10);
     public $quux = Stagehand_Class_ParserTest_Foo::string;
     // public $dummy1;
     /* public $dummy2; */
 
+    /**
+     * public a (not b)
+     */
     public $a, $b;
     public $c = 'c', $d;
     public $e, $f = 'f';

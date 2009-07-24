@@ -912,6 +912,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $name = $this->_getVariableName($params[0]->getValue());
         $property = new Stagehand_Class_Property($name);
 
+        $lex = $this->getParser()->lex;
+        $docComment = $lex->getLatestDocComment();
+        if ($docComment) {
+            $property->setDocComment($docComment, true);
+        }
+
         return $property;
     }
 
@@ -923,6 +929,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         $name = $this->_getVariableName($params[0]->getValue());
         $property = new Stagehand_Class_Property($name);
+
+        $lex = $this->getParser()->lex;
+        $docComment = $lex->getLatestDocComment();
+        if ($docComment) {
+            $property->setDocComment($docComment, true);
+        }
 
         if (is_array($params[2])) {
             $property->setValue(implode('', $params[2]), true);

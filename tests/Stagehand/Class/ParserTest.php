@@ -176,6 +176,25 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($properties['i']->isStatic());
         $this->assertTrue($properties['j']->isPublic());
         $this->assertTrue($properties['j']->isStatic());
+
+        $this->assertEquals($properties['foo']->getDocComment(), "/**
+     * public foo
+     */");
+        $this->assertEquals($properties['bar']->getDocComment(), "/**
+     * public static bar
+     */");
+        $this->assertEquals($properties['baz']->getDocComment(), "/**
+     * var baz
+     */");
+
+        $this->assertEquals($properties['a']->getDocComment(), "/**
+     * public a (not b)
+     */");
+        $this->assertNull($properties['b']->getDocComment());
+        $this->assertNull($properties['c']->getDocComment());
+        $this->assertNull($properties['d']->getDocComment());
+        $this->assertNull($properties['e']->getDocComment());
+        $this->assertNull($properties['f']->getDocComment());
     }
 
     /**
