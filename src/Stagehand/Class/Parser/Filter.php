@@ -619,6 +619,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $className = $params[1]->getValue();
         $class = new Stagehand_Class($className);
 
+        if ($params[2]) {
+            $class->setParentClass($params[2]);
+        }
+
         $lex = $this->getParser()->lex;
         $docComment = $lex->getLatestDocComment();
         if ($docComment) {
@@ -651,6 +655,29 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 /*         var_dump($params[1]); */
         return parent::execute(__FUNCTION__, $params);
     }
+
+
+
+    /**
+     * extends_from_1
+     *    // empty //
+     */
+    protected function extends_from_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * extends_from_2
+     *    T_EXTENDS fully_qualified_class_name
+     */
+    protected function extends_from_2($params)
+    {
+        return $params[1];
+    }
+
+
+
 
 
 

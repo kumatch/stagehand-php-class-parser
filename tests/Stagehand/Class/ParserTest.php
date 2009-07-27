@@ -77,7 +77,8 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_filename = dirname(__FILE__) . '/ParserTest/Foo.php';
+        $this->_basic = dirname(__FILE__) . '/ParserTest/Foo.php';
+        $this->_extended = dirname(__FILE__) . '/ParserTest/Bar.php';
     }
 
     public function tearDown() { }
@@ -87,7 +88,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseAClass()
     {
-        $class = Stagehand_Class_Parser::parse($this->_filename);
+        $class = Stagehand_Class_Parser::parse($this->_basic);
 
         $this->assertType('Stagehand_Class', $class);
         $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Foo');
@@ -109,7 +110,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseAllConstantsOfAClass()
     {
-        $class = Stagehand_Class_Parser::parse($this->_filename);
+        $class = Stagehand_Class_Parser::parse($this->_basic);
 
         $constants = $class->getConstants();
 
@@ -133,7 +134,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseAllPropertiesOfAClass()
     {
-        $class = Stagehand_Class_Parser::parse($this->_filename);
+        $class = Stagehand_Class_Parser::parse($this->_basic);
 
         $properties = $class->getProperties();
 
@@ -202,7 +203,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
      */
     public function parseAllMethodsOfAClass()
     {
-        $class = Stagehand_Class_Parser::parse($this->_filename);
+        $class = Stagehand_Class_Parser::parse($this->_basic);
 
         $methods = $class->getMethods();
 
@@ -341,11 +342,46 @@ PRIVATE_METHOD_CODE
      */");
 
 
-        $class->setName('Dummy');
+        $class->setName('Stagehand_Class_ParserTest_FooDummy');
         $class->load();
-        $dummy = new Dummy();
+        $dummy = new Stagehand_Class_ParserTest_FooDummy();
 
         $this->assertEquals($dummy->reference(10), 11);
+    }
+
+    /**
+     * @test
+     */
+    public function parseAExtendedClass()
+    {
+        $class = Stagehand_Class_Parser::parse($this->_extended);
+
+        $this->assertType('Stagehand_Class', $class);
+        $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Bar');
+        $this->assertEquals($class->getParentClass(), 'Stagehand_Class_ParserTest_Foo');
+        $this->assertFalse($class->isAbstract());
+        $this->assertFalse($class->isInterface());
+        $this->assertEquals($class->getDocComment(),"/**
+ * A test class for Stagehand_Class_Parser
+ *
+ * @package    sh-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */");
+
+        $methods = $class->getMethods();
+
+        $this->assertEquals(count($methods), 1);
+        $this->assertTrue($methods['reference']->isPublic());
+
+        $class->setName('Stagehand_Class_ParserTest_BarDummy');
+        $class->load();
+        $dummy = new Stagehand_Class_ParserTest_BarDummy();
+
+        $this->assertEquals($dummy->reference(10), 20);
+        $this->assertEquals($dummy->baz, 'BAZ');
     }
 
     /**#@-*/
