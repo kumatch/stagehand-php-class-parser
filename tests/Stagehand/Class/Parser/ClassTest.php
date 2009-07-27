@@ -35,7 +35,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Stagehand_Class_ParserTest
+// {{{ Stagehand_Class_Parser_ClassTest
 
 /**
  * Some tests for Stagehand_Class_Parser
@@ -46,7 +46,7 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
+class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
 {
 
     // {{{ properties
@@ -77,8 +77,8 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_basic = dirname(__FILE__) . '/ParserTest/Foo.php';
-        $this->_extended = dirname(__FILE__) . '/ParserTest/Bar.php';
+        $this->_basic = dirname(__FILE__) . '/ClassTest/Foo.php';
+        $this->_extended = dirname(__FILE__) . '/ClassTest/Bar.php';
     }
 
     public function tearDown() { }
@@ -91,7 +91,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $class = Stagehand_Class_Parser::parse($this->_basic);
 
         $this->assertType('Stagehand_Class', $class);
-        $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Foo');
+        $this->assertEquals($class->getName(), 'Stagehand_Class_Parser_ClassTest_Foo');
         $this->assertFalse($class->isAbstract());
         $this->assertFalse($class->isInterface());
         $this->assertEquals($class->getDocComment(),"/**
@@ -118,7 +118,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($constants['number']->getValue(), 10);
         $this->assertEquals($constants['string']->getValue(), 'example');
-        $this->assertEquals($constants['namespace']->getValue(), 'Stagehand_Class_ParserTest_Foo::number');
+        $this->assertEquals($constants['namespace']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::number');
         $this->assertEquals($constants['entryFoo']->getValue(), 20);
         $this->assertEquals($constants['entryBar']->getValue(), 30);
 
@@ -144,7 +144,7 @@ class Stagehand_Class_ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($properties['bar']->getValue(), 100);
         $this->assertEquals($properties['baz']->getValue(), 'BAZ');
         $this->assertEquals($properties['qux']->getValue(), array(1, 5, 10));
-        $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_ParserTest_Foo::string');
+        $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::string');
 
         $this->assertNull($properties['a']->getValue());
         $this->assertNull($properties['b']->getValue());
@@ -256,7 +256,7 @@ REFERENCE_METHOD_CODE
         $this->assertEquals($someArguments['e']->getValue(), 'EEE');
         $this->assertEquals($someArguments['f']->getValue(), array(1, 3, 5));
         $this->assertNull($someArguments['g']->getValue());
-        $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_ParserTest_Foo::namespace');
+        $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::namespace');
 
         $this->assertTrue($someArguments['a']->isRequired());
         $this->assertTrue($someArguments['b']->isRequired());
@@ -342,9 +342,9 @@ PRIVATE_METHOD_CODE
      */");
 
 
-        $class->setName('Stagehand_Class_ParserTest_FooDummy');
+        $class->setName('Stagehand_Class_Parser_ClassTest_FooDummy');
         $class->load();
-        $dummy = new Stagehand_Class_ParserTest_FooDummy();
+        $dummy = new Stagehand_Class_Parser_ClassTest_FooDummy();
 
         $this->assertEquals($dummy->reference(10), 11);
     }
@@ -357,8 +357,8 @@ PRIVATE_METHOD_CODE
         $class = Stagehand_Class_Parser::parse($this->_extended);
 
         $this->assertType('Stagehand_Class', $class);
-        $this->assertEquals($class->getName(), 'Stagehand_Class_ParserTest_Bar');
-        $this->assertEquals($class->getParentClass(), 'Stagehand_Class_ParserTest_Foo');
+        $this->assertEquals($class->getName(), 'Stagehand_Class_Parser_ClassTest_Bar');
+        $this->assertEquals($class->getParentClass(), 'Stagehand_Class_Parser_ClassTest_Foo');
         $this->assertFalse($class->isAbstract());
         $this->assertFalse($class->isInterface());
         $this->assertEquals($class->getDocComment(),"/**
@@ -376,9 +376,9 @@ PRIVATE_METHOD_CODE
         $this->assertEquals(count($methods), 1);
         $this->assertTrue($methods['reference']->isPublic());
 
-        $class->setName('Stagehand_Class_ParserTest_BarDummy');
+        $class->setName('Stagehand_Class_Parser_ClassTest_BarDummy');
         $class->load();
-        $dummy = new Stagehand_Class_ParserTest_BarDummy();
+        $dummy = new Stagehand_Class_Parser_ClassTest_BarDummy();
 
         $this->assertEquals($dummy->reference(10), 20);
         $this->assertEquals($dummy->baz, 'BAZ');

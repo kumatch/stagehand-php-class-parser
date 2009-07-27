@@ -35,7 +35,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Stagehand_Class_ParserTest_Foo
+// {{{ Stagehand_Class_Parser_ClassTest_Foo
 
 /**
  * A test class for Stagehand_Class_Parser
@@ -46,23 +46,67 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_Class_ParserTest_Bar extends Stagehand_Class_ParserTest_Foo
+class Stagehand_Class_Parser_ClassTest_Foo
 {
+    const number = 10;
+    const string = 'example';
+    const namespace = Stagehand_Class_Parser_ClassTest_Foo::number;
+    const entryFoo = 20, entryBar = 30;
+    const entryBaz = 40, entryQux = 50, entryQuux = 60;
+    // const $dummy1 = 100;
+    /* const $dummy2 = 200; */
+
     /**#@+
      * @access public
      */
 
+    /**
+     * public foo
+     */
+    public $foo;
+
+    /**
+     * public static bar
+     */
+    public static $bar = 100;
+
+    /**
+     * var baz
+     */
+    var $baz = 'BAZ';
+
+    public $qux = array(1, 5, 10);
+    public $quux = Stagehand_Class_Parser_ClassTest_Foo::string;
+    // public $dummy1;
+    /* public $dummy2; */
+
+    /**
+     * public a (not b)
+     */
+    public $a, $b;
+    public $c = 'c', $d;
+    public $e, $f = 'f';
+    public $g = 'g', $h = 'h';
+    public static $i, $j = 'j';
+
+    public $aa, $aaa, $aaaa, $aaaaa;
+    public $bb = 10, $bbb = 20, $bbbb = 30, $bbbbb = 40;
+    
     /**#@-*/
 
     /**#@+
      * @access protected
      */
 
+    protected $_bar;
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    private $_baz;
 
     /**#@-*/
 
@@ -71,12 +115,39 @@ class Stagehand_Class_ParserTest_Bar extends Stagehand_Class_ParserTest_Foo
      */
 
     /**
+     * __construct()
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * reference()
      */
     public function &reference($foo)
     {
-        $result = $foo + 10;
+        $result = $foo + 1;
         return $result;
+    }
+
+    public function someArguments(&$a, array $b, stdClass $c,
+                                  $d = 10, $e = 'EEE', $f = array(1, 3, 5),
+                                  $g = null, $h = Stagehand_Class_Parser_ClassTest_Foo::namespace)
+    {
+    }
+
+    /**
+     * staticMethod()
+     */
+    public static function staticMethod()
+    {
+    }
+
+    /**
+     * finalMethod()
+     */
+    final public function finalMethod()
+    {
     }
 
     /**#@-*/
@@ -85,11 +156,39 @@ class Stagehand_Class_ParserTest_Bar extends Stagehand_Class_ParserTest_Foo
      * @access protected
      */
 
+    /**
+     * protectedMethod()
+     */
+    protected function protectedMethod()
+    {
+        return $this->_bar ? true : false;
+    }
+
+    /**
+     * finalStaticProtectedMethod()
+     */
+    final protected static function finalStaticProtectedMethod()
+    {
+    }
+
     /**#@-*/
 
     /**#@+
      * @access private
      */
+
+    /**
+     * privateMethod()
+     */
+    private function privateMethod($baz)
+    {
+        /**
+         * A document block in method.
+         */
+        if ($baz) {
+            $this->_baz = $baz;
+        }
+    }
 
     /**#@-*/
 
