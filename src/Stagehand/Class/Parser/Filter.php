@@ -618,6 +618,11 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         $className = $params[1]->getValue();
         $class = new Stagehand_Class($className);
+        if ($params[0] === 'abstract') {
+            $class->defineAbstract();
+        } elseif ($params[1] === 'final') {
+            $class->defineFinal();
+        }
 
         if ($params[2]) {
             $class->setParentClass($params[2]);
@@ -655,6 +660,37 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 /*         var_dump($params[1]); */
         return parent::execute(__FUNCTION__, $params);
     }
+
+
+
+    /**
+     * class_entry_type_1
+     *    T_CLASS
+     */
+    protected function class_entry_type_1($params)
+    {
+        return $params[0]->getValue();
+    }
+
+    /**
+     * class_entry_type_2
+     *    T_ABSTRACT T_CLASS
+     */
+    protected function class_entry_type_2($params)
+    {
+        return $params[0]->getValue();
+    }
+
+    /**
+     * class_entry_type_3
+     *    T_FINAL T_CLASS
+     */
+    protected function class_entry_type_3($params)
+    {
+        return $params[0]->getValue();
+    }
+
+
 
 
 
@@ -1248,7 +1284,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function method_body_1($params)
     {
-        return $params[0];
+        return null;
     }
 
     /**
@@ -1353,6 +1389,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
                 break;
             case 'static':
                 $declar->defineStatic();
+                break;
+            case 'abstract':
+                $declar->defineAbstract();
                 break;
             case 'final':
                 $declar->defineFinal();
