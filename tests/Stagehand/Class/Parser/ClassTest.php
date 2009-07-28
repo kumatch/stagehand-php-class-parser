@@ -384,6 +384,46 @@ PRIVATE_METHOD_CODE
         $this->assertEquals($dummy->baz, 'BAZ');
     }
 
+    /**
+     * @test
+     */
+    public function parseAClassWithInterfaces()
+    {
+        $class = Stagehand_Class_Parser::parse(dirname(__FILE__) .
+                                               '/ClassTest/HasOneInterface.php'
+                                               );
+
+        $this->assertType('Stagehand_Class', $class);
+        $this->assertEquals($class->getName(), 'Stagehand_Class_Parser_ClassTest_HasOneInterface');
+
+        $interfaces = $class->getInterfaces();
+
+        $this->assertEquals(count($interfaces), 1);
+        $this->assertEquals($interfaces['Stagehand_Class_Parser_ClassTest_InterfaceOne'],
+                            'Stagehand_Class_Parser_ClassTest_InterfaceOne'
+                            );
+
+        $class = Stagehand_Class_Parser::parse(dirname(__FILE__) .
+                                               '/ClassTest/HasThreeInterfaces.php'
+                                               );
+
+        $this->assertType('Stagehand_Class', $class);
+        $this->assertEquals($class->getName(), 'Stagehand_Class_Parser_ClassTest_HasThreeInterface');
+
+        $interfaces = $class->getInterfaces();
+
+        $this->assertEquals(count($interfaces), 3);
+        $this->assertEquals($interfaces['Stagehand_Class_Parser_ClassTest_InterfaceOne'],
+                            'Stagehand_Class_Parser_ClassTest_InterfaceOne'
+                            );
+        $this->assertEquals($interfaces['Stagehand_Class_Parser_ClassTest_InterfaceTwo'],
+                            'Stagehand_Class_Parser_ClassTest_InterfaceTwo'
+                            );
+        $this->assertEquals($interfaces['Stagehand_Class_Parser_ClassTest_InterfaceThree'],
+                            'Stagehand_Class_Parser_ClassTest_InterfaceThree'
+                            );
+    }
+
     /**#@-*/
 
     /**#@+

@@ -239,6 +239,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         return $params[0];
     }
 
+
+
     /**
      * class_statement_list_1:
      *    class_statement_list class_statement
@@ -249,16 +251,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         return $params[0];
     }
 
-    /**
-     * interface_list_2:
-     *    interface_list ',' fully_qualified_class_name
-     */
-    protected function interface_list_2($params)
-    {
-        $params[0]->addValue($params[1]);
-        $params[0]->addValue($params[2]);
-        return $params[0];
-    }
+
 
 
 
@@ -628,6 +621,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
             $class->setParentClass($params[2]);
         }
 
+        if ($params[3] && is_array($params[3])) {
+            foreach ($params[3] as $interface) {
+                $class->addInterface($interface);
+            }
+        }
+
         $lex = $this->getParser()->lex;
         $docComment = $lex->getLatestDocComment();
         if ($docComment) {
@@ -713,6 +712,45 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     }
 
 
+
+    /**
+     * implements_list_1
+     *    // empty //
+     */
+    protected function implements_list_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * implements_list_2
+     *    T_IMPLEMENTS interface_list
+     */
+    protected function implements_list_2($params)
+    {
+        return $params[1];
+    }
+
+
+
+    /**
+     * interface_list_1:
+     *    fully_qualified_class_name
+     */
+    protected function interface_list_1($params)
+    {
+        return array($params[0]);
+    }
+
+    /**
+     * interface_list_2:
+     *    interface_list ',' fully_qualified_class_name
+     */
+    protected function interface_list_2($params)
+    {
+        array_push($params[0], $params[2]);
+        return $params[0];
+    }
 
 
 
