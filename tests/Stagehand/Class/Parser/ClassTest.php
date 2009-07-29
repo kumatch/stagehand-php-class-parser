@@ -114,19 +114,37 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
 
         $constants = $class->getConstants();
 
-        $this->assertEquals(count($constants), 8);
+        $this->assertEquals(count($constants), 10);
 
         $this->assertEquals($constants['number']->getValue(), 10);
         $this->assertEquals($constants['string']->getValue(), 'example');
         $this->assertEquals($constants['namespace']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::number');
         $this->assertEquals($constants['entryFoo']->getValue(), 20);
         $this->assertEquals($constants['entryBar']->getValue(), 30);
+        $this->assertEquals($constants['null_value']->getValue(), null);
+        $this->assertEquals($constants['null_string']->getValue(), 'null');
 
         $this->assertFalse($constants['number']->isParsable());
         $this->assertFalse($constants['string']->isParsable());
         $this->assertTrue($constants['namespace']->isParsable());
         $this->assertFalse($constants['entryFoo']->isParsable());
         $this->assertFalse($constants['entryBar']->isParsable());
+        $this->assertFalse($constants['null_value']->isParsable());
+        $this->assertFalse($constants['null_string']->isParsable());
+
+        $class->setName('Stagehand_Class_Parser_ClassTest_Foo_Constant');
+        $class->load();
+
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::number, 10);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::string, 'example');
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::namespace, 10);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryFoo, 20);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryBar, 30);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryBaz, 40);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryQux, 50);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryQuux, 60);
+        $this->assertNull(Stagehand_Class_Parser_ClassTest_Foo_Constant::null_value);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::null_string, 'null');
     }
 
     /**
@@ -138,13 +156,24 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
 
         $properties = $class->getProperties();
 
-        $this->assertEquals(count($properties), 25);
+        $this->assertEquals(count($properties), 27);
 
         $this->assertNull($properties['foo']->getValue());
         $this->assertEquals($properties['bar']->getValue(), 100);
         $this->assertEquals($properties['baz']->getValue(), 'BAZ');
         $this->assertEquals($properties['qux']->getValue(), array(1, 5, 10));
         $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::string');
+
+        $this->assertEquals($properties['null_value']->getValue(), null);
+        $this->assertEquals($properties['null_string']->getValue(), 'null');
+
+        $this->assertFalse($properties['foo']->isParsable());
+        $this->assertFalse($properties['bar']->isParsable());
+        $this->assertFalse($properties['baz']->isParsable());
+        $this->assertFalse($properties['qux']->isParsable());
+        $this->assertTrue($properties['quux']->isParsable());
+        $this->assertFalse($properties['null_value']->isParsable());
+        $this->assertFalse($properties['null_string']->isParsable());
 
         $this->assertNull($properties['a']->getValue());
         $this->assertNull($properties['b']->getValue());
@@ -196,6 +225,20 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
         $this->assertNull($properties['d']->getDocComment());
         $this->assertNull($properties['e']->getDocComment());
         $this->assertNull($properties['f']->getDocComment());
+
+        $class->setName('Stagehand_Class_Parser_ClassTest_Foo_Property');
+        $class->load();
+        $c = new Stagehand_Class_Parser_ClassTest_Foo_Property();
+
+        $this->assertEquals($c->foo, null);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Property::$bar, 100);
+        $this->assertEquals($c->baz, 'BAZ');
+        $this->assertEquals($c->qux[0], 1);
+        $this->assertEquals($c->qux[1], 5);
+        $this->assertEquals($c->qux[2], 10);
+        $this->assertEquals($c->quux, 'example');
+        $this->assertEquals($c->null_value, null);
+        $this->assertEquals($c->null_string, 'null');
     }
 
     /**

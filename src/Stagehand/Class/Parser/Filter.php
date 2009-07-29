@@ -786,6 +786,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
         if (is_array($scalar)) {
             $constant->setValue(implode('', $scalar), true);
+        } elseif (strtolower($scalar) === 'null') {
+            $constant->setValue(null);
         } else {
             $value = $this->_getVariableValue($scalar);
             $constant->setValue($value);

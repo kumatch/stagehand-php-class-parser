@@ -53,6 +53,8 @@ class Stagehand_Class_Parser_ClassTest_Foo
     const namespace = Stagehand_Class_Parser_ClassTest_Foo::number;
     const entryFoo = 20, entryBar = 30;
     const entryBaz = 40, entryQux = 50, entryQuux = 60;
+    const null_value = null;
+    const null_string = 'null';
     // const $dummy1 = 100;
     /* const $dummy2 = 200; */
 
@@ -77,6 +79,8 @@ class Stagehand_Class_Parser_ClassTest_Foo
 
     public $qux = array(1, 5, 10);
     public $quux = Stagehand_Class_Parser_ClassTest_Foo::string;
+    public $null_value = null;
+    public $null_string = 'null';
     // public $dummy1;
     /* public $dummy2; */
 
