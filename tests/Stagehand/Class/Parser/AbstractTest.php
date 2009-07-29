@@ -222,7 +222,7 @@ PRIVATE_METHOD_CODE
     /**
      * @test
      */
-    public function parseAExtendedClass()
+    public function parseAnExtendedClass()
     {
         $class = Stagehand_Class_Parser::parse($this->_extended);
 
