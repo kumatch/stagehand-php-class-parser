@@ -52,22 +52,6 @@ class Stagehand_Class_Parser_ClassTest_HasThreeInterface implements Stagehand_Cl
      * @access public
      */
 
-    /**
-     * public foo
-     */
-
-    /**
-     * public static bar
-     */
-
-    /**
-     * var baz
-     */
-
-    /**
-     * public a (not b)
-     */
-
     /**#@-*/
 
     /**#@+

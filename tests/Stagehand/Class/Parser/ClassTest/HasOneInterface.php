@@ -52,22 +52,6 @@ class Stagehand_Class_Parser_ClassTest_HasOneInterface implements Stagehand_Clas
      * @access public
      */
 
-    /**
-     * public foo
-     */
-
-    /**
-     * public static bar
-     */
-
-    /**
-     * var baz
-     */
-
-    /**
-     * public a (not b)
-     */
-
     /**#@-*/
 
     /**#@+

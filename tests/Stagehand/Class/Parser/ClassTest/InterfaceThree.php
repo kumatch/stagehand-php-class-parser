@@ -52,22 +52,6 @@ interface Stagehand_Class_Parser_ClassTest_InterfaceThree
      * @access public
      */
 
-    /**
-     * public foo
-     */
-
-    /**
-     * public static bar
-     */
-
-    /**
-     * var baz
-     */
-
-    /**
-     * public a (not b)
-     */
-
     /**#@-*/
 
     /**#@+
