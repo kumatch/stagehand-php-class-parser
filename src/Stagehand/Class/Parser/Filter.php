@@ -613,7 +613,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $class = new Stagehand_Class($className);
         if ($params[0] === 'abstract') {
             $class->defineAbstract();
-        } elseif ($params[1] === 'final') {
+        } elseif ($params[0] === 'final') {
             $class->defineFinal();
         }
 
@@ -656,7 +656,36 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function unticked_class_declaration_statement_2($params)
     {
-/*         var_dump($params[1]); */
+        $className = $params[1]->getValue();
+        $class = new Stagehand_Class($className);
+        $class->defineInterface();
+
+        if ($params[2] && is_array($params[2])) {
+            foreach ($params[2] as $interface) {
+                $class->addInterface($interface);
+            }
+        }
+
+        $lex = $this->getParser()->lex;
+        $docComment = $lex->getLatestDocComment();
+        if ($docComment) {
+            $class->setDocComment($docComment, true);
+        }
+
+        foreach ($this->getCurrentConstants() as $constant) {
+            $class->addConstant($constant);
+        }
+
+        foreach ($this->getCurrentProperties() as $property) {
+            $class->addProperty($property);
+        }
+
+        foreach ($this->getCurrentMethods() as $method) {
+            $class->addMethod($method);
+        }
+
+        $this->addClass($class);
+
         return parent::execute(__FUNCTION__, $params);
     }
 
@@ -710,6 +739,28 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         return $params[1];
     }
+
+
+
+
+    /**
+     * interface_extends_list_1
+     *    // empty //
+     */
+    protected function interface_extends_list_1($params)
+    {
+        return null;
+    }
+
+    /**
+     * interface_extends_list_2
+     *    T_EXTENDS interface_list
+     */
+    protected function interface_extends_list_2($params)
+    {
+        return $params[1];
+    }
+
 
 
 
