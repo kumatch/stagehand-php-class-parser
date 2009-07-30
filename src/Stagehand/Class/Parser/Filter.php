@@ -152,6 +152,17 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     }
 
     // }}}
+    // {{{ clearCurrentConstants()
+
+    /**
+     * Clears all current constants.
+     */
+    public function clearCurrentConstants()
+    {
+        $this->_currentConstants = array();
+    }
+
+    // }}}
     // {{{ getCurrentProperties()
 
     /**
@@ -175,6 +186,17 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     public function addCurrentProperty(Stagehand_Class_Property $property)
     {
         array_push($this->_currentProperties, $property);
+    }
+
+    // }}}
+    // {{{ clearCurrentProperty
+
+    /**
+     * Clears all current properties.
+     */
+    public function clearCurrentProperties()
+    {
+        $this->_currentProperties = array();
     }
 
     // }}}
@@ -203,6 +225,16 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         array_push($this->_currentMethods, $method);
     }
 
+    // }}}
+    // {{{ clearCurrentMethod
+
+    /**
+     * Clears all current methods.
+     */
+    public function clearCurrentMethods()
+    {
+        $this->_currentMethods = array();
+    }
 
     /**#@-*/
 
@@ -627,26 +659,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
             }
         }
 
-        $lex = $this->getParser()->lex;
-        $docComment = $lex->getLatestDocComment();
-        if ($docComment) {
-            $class->setDocComment($docComment, true);
-        }
-
-        foreach ($this->getCurrentConstants() as $constant) {
-            $class->addConstant($constant);
-        }
-
-        foreach ($this->getCurrentProperties() as $property) {
-            $class->addProperty($property);
-        }
-
-        foreach ($this->getCurrentMethods() as $method) {
-            $class->addMethod($method);
-        }
-
-        $this->addClass($class);
-
+        $this->_declarClass($class);
         return parent::execute(__FUNCTION__, $params);
     }
 
@@ -666,6 +679,12 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
             }
         }
 
+        $this->_declarClass($class);
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    protected function _declarClass($class)
+    {
         $lex = $this->getParser()->lex;
         $docComment = $lex->getLatestDocComment();
         if ($docComment) {
@@ -685,8 +704,9 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         }
 
         $this->addClass($class);
-
-        return parent::execute(__FUNCTION__, $params);
+        $this->clearCurrentConstants();
+        $this->clearCurrentProperties();
+        $this->clearCurrentMethods();
     }
 
 

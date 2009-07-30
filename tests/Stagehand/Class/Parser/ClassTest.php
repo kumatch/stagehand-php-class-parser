@@ -467,6 +467,57 @@ PRIVATE_METHOD_CODE
                             );
     }
 
+    /**
+     * @test
+     */
+    public function parseTwoClassesInOneFileScript()
+    {
+        $classes = Stagehand_Class_Parser::parse(dirname(__FILE__) . '/ClassTest/Baz.php');
+
+        $this->assertEquals(count($classes), 2);
+
+        $baz = $classes[0];
+        $exception = $classes[1];
+
+        $this->assertType('Stagehand_Class', $baz);
+        $this->assertEquals($baz->getName(), 'Stagehand_Class_Parser_ClassTest_Baz');
+        $this->assertNull($baz->getParentClass());
+        $this->assertFalse($baz->isAbstract());
+        $this->assertFalse($baz->isInterface());
+        $this->assertEquals($baz->getDocComment(),"/**
+ * A test class for Stagehand_Class_Parser
+ *
+ * @package    sh-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */");
+        $this->assertEquals(count($baz->getConstants()), 2);
+        $this->assertEquals(count($baz->getProperties()), 4);
+        $this->assertEquals(count($baz->getMethods()), 3);
+
+
+        $this->assertType('Stagehand_Class', $exception);
+        $this->assertEquals($exception->getName(), 'Stagehand_Class_Parser_ClassTest_BazException');
+        $this->assertEquals($exception->getParentClass(), 'Exception');
+        $this->assertFalse($exception->isAbstract());
+        $this->assertFalse($exception->isInterface());
+        $this->assertEquals($exception->getDocComment(),"/**
+ * A test exception class for Stagehand_Class_Parser
+ *
+ * @package    sh-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */");
+        $this->assertEquals(count($exception->getConstants()), 0);
+        $this->assertEquals(count($exception->getProperties()), 0);
+        $this->assertEquals(count($exception->getMethods()), 0);
+    }
+
+
     /**#@-*/
 
     /**#@+
