@@ -35,7 +35,7 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Stagehand_Class_Parser_ClassTest_Foo
+// {{{ Stagehand_Class_Parser_ClassTest_Bar
 
 /**
  * A test class for Stagehand_Class_Parser
