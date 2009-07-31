@@ -67,11 +67,14 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      * @access private
      */
 
+    private $_currentPosition = -1;
     private $_classes = array();
 
     private $_currentConstants = array();
     private $_currentProperties = array();
     private $_currentMethods = array();
+
+    private $_externalCode;
 
     /**#@-*/
 
@@ -124,6 +127,39 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         array_push($this->_classes, $class);
     }
 
+    // }}}
+    // {{{ getCurrentClass()
+
+    /**
+     * Gets a current class.
+     *
+     * @return mixed
+     */
+    public function getCurrentClass()
+    {
+        $classCount = count($this->_classes);
+
+        if (isset($this->_classes[$classCount - 1])) {
+            return $this->_classes[$classCount - 1];
+        }
+    }
+
+    // }}}
+    // {{{ getPreClass()
+
+    /**
+     * Gets a pre class.
+     *
+     * @return mixed
+     */
+    public function getPreClass()
+    {
+        $classCount = count($this->_classes);
+
+        if (isset($this->_classes[$classCount - 2])) {
+            return $this->_classes[$classCount - 2];
+        }
+    }
 
     // }}}
     // {{{ getCurrentConstants()
@@ -236,6 +272,33 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $this->_currentMethods = array();
     }
 
+    // }}}
+    // {{{ getExternalCode()
+
+    /**
+     * Gets a external code of class declaration.
+     *
+     * @return string
+     */
+    public function getExternalCode()
+    {
+        return $this->_externalCode;
+    }
+
+    // }}}
+    // {{{ setExternalCode()
+
+    /**
+     * Sets a external code of class declaration.
+     *
+     * @param string $code
+     */
+    public function setExternalCode($code)
+    {
+        $this->_externalCode = $code;
+    }
+
+
     /**#@-*/
 
     /**#@+
@@ -306,6 +369,142 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
                      $params[1]->getValue(),
                      $params[2]->getValue(),
                      );                     
+    }
+
+
+
+    /**
+     * top_statement_1
+     *    statement
+     */
+    protected function top_statement_1($params)
+    {
+        $startPosition = $this->_currentPosition + 1;
+        $lastPosition  = $this->_getLastTokenPosition($params);
+
+        $code = $this->_buildCode($startPosition, $lastPosition);
+
+        $this->setExternalCode($this->getExternalCode() . $code);
+        $this->_currentPosition = $lastPosition;
+
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_2
+     *    function_declaration_statement
+     */
+    protected function top_statement_2($params)
+    {
+        $startPosition = $this->_currentPosition + 1;
+        $lastPosition  = $this->_getLastTokenPosition($params);
+
+        $code = $this->_buildCode($startPosition, $lastPosition);
+
+        $this->setExternalCode($this->getExternalCode() . $code);
+        $this->_currentPosition = $lastPosition;
+
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_3
+     *    class_declaration_statement
+     */
+    protected function top_statement_3($params)
+    {
+        $lastPosition  = $this->_getLastTokenPosition($params);
+        $this->_currentPosition = $lastPosition;
+
+        $externalCode  = $this->getExternalCode();
+
+        if ($externalCode) {
+            $currentClass = $this->getCurrentClass();
+            $currentClass->setPreCode($externalCode);
+
+            $preClass = $this->getPreClass();
+            if ($preClass instanceof Stagehand_Class) {
+                $preClass->setPostCode($externalCode);
+            }
+
+            $this->setExternalCode('');
+        }
+
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_4
+     *    T_HALT_COMPILER '(' ')' ';'
+     */
+    protected function top_statement_4($params)
+    {
+        $startPosition = $this->_currentPosition + 1;
+        $lastPosition  = $params[3]->getPosition();
+
+        $code = $this->_buildCode($startPosition, $lastPosition);
+
+        $this->setExternalCode($this->getExternalCode() . $code);
+        $this->_currentPosition = $lastPosition;
+
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_5
+     *    T_NAMESPACE namespace_name ';'
+     */
+    protected function top_statement_5($params)
+    {
+        // will support php5.3
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_6
+     *    T_NAMESPACE namespace_name '{' top_statement_list '}'
+     */
+    protected function top_statement_6($params)
+    {
+        // will support php5.3
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_7
+     *    T_NAMESPACE '{' top_statement_list '}'
+     */
+    protected function top_statement_7($params)
+    {
+        // will support php5.3
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_8
+     *    T_USE use_declarations ';'
+     */
+    protected function top_statement_8($params)
+    {
+        // will support php5.3
+        return parent::execute(__FUNCTION__, $params);
+    }
+
+    /**
+     * top_statement_9
+     *    constant_declaration ';'
+     */
+    protected function top_statement_9($params)
+    {
+        $startPosition = $this->_currentPosition + 1;
+        $lastPosition  = $params[1]->getPosition();
+
+        $code = $this->_buildCode($startPosition, $lastPosition);
+
+        $this->setExternalCode($this->getExternalCode() . $code);
+        $this->_currentPosition = $lastPosition;
+
+        return parent::execute(__FUNCTION__, $params);
     }
 
 
@@ -1511,6 +1710,54 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
                 break;
             }
         }
+    }
+
+    protected function _getLastTokenPosition($statement)
+    {
+        $value = $statement;
+        while (1) {
+            if (is_array($value)) {
+                $value = end($value);
+            }
+
+            if ($value instanceof Stagehand_PHP_Parser_YYToken) {
+                $value = $value->getValues();
+                continue;
+            }
+
+            if ($value instanceof Stagehand_PHP_Lexer_Token) {
+                $lastPosition = $value->getPosition();
+                break;
+            }
+        }
+
+        return $lastPosition;
+    }
+
+    protected function _buildCode($startPosition, $lastPosition)
+    {
+        $lex = $this->getParser()->lex;
+        $codeTokens = $lex->getTokens($startPosition, $lastPosition);
+        $code = null;
+
+        $ignoreList = array('T_OPEN_TAG', 'T_CLOSE_TAG',
+                            'T_COMMENT', 'T_DOC_COMMENT', 'T_INLINE_HTML', 
+                            );
+
+        foreach ($codeTokens as $token) {
+            if (is_array($token)) {
+                $name = token_name($token[0]);
+                if (in_array($name, $ignoreList)) {
+                    continue;
+                }
+
+                $code .= $token[1];
+            } else {
+                $code .= $token;
+            }
+        }
+
+        return $code;
     }
 
     /**#@-*/

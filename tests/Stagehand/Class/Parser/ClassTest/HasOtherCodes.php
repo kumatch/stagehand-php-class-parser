@@ -35,10 +35,22 @@
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Stagehand_Class_Parser
+$a = 10;
+define('Stagehand_Class_Parser_ClassTest_HasOtherCodes_Foo', 10);
+Stagehand_Class_Parser_ClassTest_HasOtherCodes_Bar::doMethod(10, 20, 30);
+
+function stagehand_class_parser_classTest_hasOtherCodes_baz($baz)
+{
+    return $baz * 2;
+}
+__halt_compiler();
+const Stagehand_Class_Parser_ClassTest_HasOtherCodes_FooConst = 10;
+
+
+// {{{ Stagehand_Class_Parser_ClassTest_HasOtherCodes
 
 /**
- * A class for parsing PHP class.
+ * A test class for Stagehand_Class_Parser
  *
  * @package    sh-class-parser
  * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
@@ -46,11 +58,8 @@
  * @version    Release: @package_version@
  * @since      Class available since Release 0.1.0
  */
-class Stagehand_Class_Parser
+class Stagehand_Class_Parser_ClassTest_HasOtherCodes
 {
-
-    // {{{ properties
-
     /**#@+
      * @access public
      */
@@ -72,43 +81,6 @@ class Stagehand_Class_Parser
     /**#@+
      * @access public
      */
-
-    // }}}
-    // {{{ parse()
-
-    /**
-     * Parses a PHP class.
-     *
-     * @param string $filename  a filename of PHP script.
-     * @return mixed
-     */
-    public static function parse($filename)
-    {
-        $lexer = new Stagehand_PHP_Lexer($filename);
-        $filter = new Stagehand_Class_Parser_Filter();
-
-        $parser = new Stagehand_PHP_Parser($lexer, $filter);
-        $parser->parse();
-
-        $classes = $filter->getClasses();
-
-        $code = $filter->getExternalCode();
-        if ($code) {
-            $class = $filter->getCurrentClass();
-            $class->setPostCode($code);
-            $filter->setExternalCode('');
-        }
-
-        if (!count($classes)) {
-            return;
-        }
-
-        if (count($classes) == 1) {
-            return $classes[0];
-        }
-
-        return $classes;
-    }
 
     /**#@-*/
 
@@ -128,6 +100,9 @@ class Stagehand_Class_Parser
 }
 
 // }}}
+
+Stagehand_Class_Parser_ClassTest_HasOtherCode::doMethodA();
+Stagehand_Class_Parser_ClassTest_HasOtherCode::doMethodB('foo');
 
 /*
  * Local Variables:

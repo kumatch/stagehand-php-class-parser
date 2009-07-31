@@ -517,6 +517,84 @@ PRIVATE_METHOD_CODE
         $this->assertEquals(count($exception->getMethods()), 0);
     }
 
+    /**
+     * @test
+     */
+    public function parseAClassWithPreAndPostCodeOfClassDeclaration()
+    {
+        $class = Stagehand_Class_Parser::parse(dirname(__FILE__) . '/ClassTest/HasOtherCodes.php');
+
+        $this->assertType('Stagehand_Class', $class);
+        $this->assertEquals($class->getName(), 'Stagehand_Class_Parser_ClassTest_HasOtherCodes');
+
+        $this->assertEquals($class->getPreCode(), <<<PRE_CODE
+
+
+
+
+\$a = 10;
+define('Stagehand_Class_Parser_ClassTest_HasOtherCodes_Foo', 10);
+Stagehand_Class_Parser_ClassTest_HasOtherCodes_Bar::doMethod(10, 20, 30);
+
+function stagehand_class_parser_classTest_hasOtherCodes_baz(\$baz)
+{
+    return \$baz * 2;
+}
+__halt_compiler();
+const Stagehand_Class_Parser_ClassTest_HasOtherCodes_FooConst = 10;
+PRE_CODE
+);
+
+        $this->assertEquals($class->getPostCode(), <<<POST_CODE
+
+
+
+Stagehand_Class_Parser_ClassTest_HasOtherCode::doMethodA();
+Stagehand_Class_Parser_ClassTest_HasOtherCode::doMethodB('foo');
+POST_CODE
+);
+    }
+
+    /**
+     * @test
+     */
+    public function parseSomeClassesWithPreAndPostCodeOfClassDeclaration()
+    {
+        $classes = Stagehand_Class_Parser::parse(dirname(__FILE__)
+                                                 . '/ClassTest/HasOtherCodesTwo.php'
+                                                 );
+
+        $this->assertEquals(count($classes), 3);
+
+        $foo = $classes[0];
+        $bar = $classes[1];
+        $baz = $classes[2];
+
+        $this->assertType('Stagehand_Class', $foo);
+        $this->assertEquals($foo->getName(), 'Stagehand_Class_Parser_ClassTest_HasOtherCodesTwo_Foo');
+        $this->assertEquals($foo->getPreCode(), '$a = 10;');
+        $this->assertEquals($foo->getPostCode(), '
+
+$b = 20;');
+
+        $this->assertType('Stagehand_Class', $bar);
+        $this->assertEquals($bar->getName(), 'Stagehand_Class_Parser_ClassTest_HasOtherCodesTwo_Bar');
+        $this->assertEquals($bar->getPreCode(), '
+
+$b = 20;');
+        $this->assertEquals($bar->getPostCode(), '
+
+$c = 30;');
+
+        $this->assertType('Stagehand_Class', $baz);
+        $this->assertEquals($baz->getName(), 'Stagehand_Class_Parser_ClassTest_HasOtherCodesTwo_Baz');
+        $this->assertEquals($baz->getPreCode(), '
+
+$c = 30;');
+        $this->assertEquals($baz->getPostCode(), '
+
+$d = 40;');
+    }
 
     /**#@-*/
 
