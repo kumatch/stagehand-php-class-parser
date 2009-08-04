@@ -55,6 +55,10 @@ class Stagehand_Class_Parser_ClassTest_Foo
     const entryBaz = 40, entryQux = 50, entryQuux = 60;
     const null_value = null;
     const null_string = 'null';
+    const true_value = true;
+    const true_string = 'true';
+    const false_value = false;
+    const false_string = 'false';
     // const $dummy1 = 100;
     /* const $dummy2 = 200; */
 
@@ -141,7 +145,8 @@ class Stagehand_Class_Parser_ClassTest_Foo
 
     public function someArguments(&$a, array $b, stdClass $c,
                                   $d = 10, $e = 'EEE', $f = array(1, 3, 5),
-                                  $g = null, $h = Stagehand_Class_Parser_ClassTest_Foo::namespace)
+                                  $g = null, $h = Stagehand_Class_Parser_ClassTest_Foo::namespace,
+                                  $i = true, $j = false)
     {
     }
 

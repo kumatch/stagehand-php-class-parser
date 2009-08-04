@@ -114,7 +114,7 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
 
         $constants = $class->getConstants();
 
-        $this->assertEquals(count($constants), 10);
+        $this->assertEquals(count($constants), 14);
 
         $this->assertEquals($constants['number']->getValue(), 10);
         $this->assertEquals($constants['string']->getValue(), 'example');
@@ -123,6 +123,10 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($constants['entryBar']->getValue(), 30);
         $this->assertEquals($constants['null_value']->getValue(), null);
         $this->assertEquals($constants['null_string']->getValue(), 'null');
+        $this->assertTrue($constants['true_value']->getValue());
+        $this->assertEquals($constants['true_string']->getValue(), 'true');
+        $this->assertFalse($constants['false_value']->getValue());
+        $this->assertEquals($constants['false_string']->getValue(), 'false');
 
         $this->assertFalse($constants['number']->isParsable());
         $this->assertFalse($constants['string']->isParsable());
@@ -131,6 +135,10 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($constants['entryBar']->isParsable());
         $this->assertFalse($constants['null_value']->isParsable());
         $this->assertFalse($constants['null_string']->isParsable());
+        $this->assertFalse($constants['true_value']->isParsable());
+        $this->assertFalse($constants['true_string']->isParsable());
+        $this->assertFalse($constants['false_value']->isParsable());
+        $this->assertFalse($constants['false_string']->isParsable());
 
         $class->setName('Stagehand_Class_Parser_ClassTest_Foo_Constant');
         $class->load();
@@ -145,6 +153,10 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::entryQuux, 60);
         $this->assertNull(Stagehand_Class_Parser_ClassTest_Foo_Constant::null_value);
         $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::null_string, 'null');
+        $this->assertTrue(Stagehand_Class_Parser_ClassTest_Foo_Constant::true_value);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::true_string, 'true');
+        $this->assertFalse(Stagehand_Class_Parser_ClassTest_Foo_Constant::false_value);
+        $this->assertEquals(Stagehand_Class_Parser_ClassTest_Foo_Constant::false_string, 'false');
     }
 
     /**
@@ -291,7 +303,7 @@ REFERENCE_METHOD_CODE
 
         $someArguments = $methods['someArguments']->getArguments();
 
-        $this->assertEquals(count($someArguments), 8);
+        $this->assertEquals(count($someArguments), 10);
 
         $this->assertNull($someArguments['a']->getValue());
         $this->assertNull($someArguments['b']->getValue());
@@ -301,6 +313,8 @@ REFERENCE_METHOD_CODE
         $this->assertEquals($someArguments['f']->getValue(), array(1, 3, 5));
         $this->assertNull($someArguments['g']->getValue());
         $this->assertEquals($someArguments['h']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::namespace');
+        $this->assertTrue($someArguments['i']->getValue());
+        $this->assertFalse($someArguments['j']->getValue());
 
         $this->assertTrue($someArguments['a']->isRequired());
         $this->assertTrue($someArguments['b']->isRequired());
@@ -310,6 +324,8 @@ REFERENCE_METHOD_CODE
         $this->assertFalse($someArguments['f']->isRequired());
         $this->assertFalse($someArguments['g']->isRequired());
         $this->assertFalse($someArguments['h']->isRequired());
+        $this->assertFalse($someArguments['i']->isRequired());
+        $this->assertFalse($someArguments['j']->isRequired());
 
         $this->assertFalse($someArguments['a']->isParsable());
         $this->assertFalse($someArguments['b']->isParsable());
@@ -319,6 +335,8 @@ REFERENCE_METHOD_CODE
         $this->assertFalse($someArguments['f']->isParsable());
         $this->assertFalse($someArguments['g']->isParsable());
         $this->assertTrue($someArguments['h']->isParsable());
+        $this->assertFalse($someArguments['i']->isParsable());
+        $this->assertFalse($someArguments['j']->isParsable());
 
         $this->assertTrue($someArguments['a']->isReference());
         $this->assertFalse($someArguments['b']->isReference());
@@ -328,6 +346,8 @@ REFERENCE_METHOD_CODE
         $this->assertFalse($someArguments['f']->isReference());
         $this->assertFalse($someArguments['g']->isReference());
         $this->assertFalse($someArguments['h']->isReference());
+        $this->assertFalse($someArguments['i']->isReference());
+        $this->assertFalse($someArguments['j']->isReference());
 
         $this->assertNull($someArguments['a']->getTypeHinting());
         $this->assertEquals($someArguments['b']->getTypeHinting(), 'array');
@@ -337,6 +357,8 @@ REFERENCE_METHOD_CODE
         $this->assertNull($someArguments['f']->getTypeHinting());
         $this->assertNull($someArguments['g']->getTypeHinting());
         $this->assertNull($someArguments['h']->getTypeHinting());
+        $this->assertNull($someArguments['i']->getTypeHinting());
+        $this->assertNull($someArguments['j']->getTypeHinting());
 
         $this->assertTrue($methods['staticMethod']->isPublic());
         $this->assertTrue($methods['staticMethod']->isStatic());

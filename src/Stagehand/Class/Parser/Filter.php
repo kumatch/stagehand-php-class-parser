@@ -1058,11 +1058,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
         if (is_array($scalar)) {
             $constant->setValue(implode('', $scalar), true);
-        } elseif (strtolower($scalar) === 'null') {
-            $constant->setValue(null);
         } else {
-            $value = $this->_getVariableValue($scalar);
-            $constant->setValue($value);
+            $constant->setValue($this->_getStaticScalarValue($scalar));
         }
 
         $this->addCurrentConstant($constant);
@@ -1693,10 +1690,19 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         if ($scalar instanceof ArrayObject) {
             $value = (array)$scalar;
         } else {
-            if (($scalar === 'null')) {
+            switch (strtolower($scalar)) {
+            case 'null':
                 $value = null;
-            } else {
+                break;
+            case 'true':
+                $value = true;
+                break;
+            case 'false':
+                $value = false;
+                break;
+            default:
                 $value = $this->_getVariableValue($scalar);
+                break;
             }
         }
 
