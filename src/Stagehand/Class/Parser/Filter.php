@@ -755,7 +755,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function non_empty_static_array_pair_list_1($params)
     {
         $list = $params[0];
-        eval("\$list[$params[2]] = $params[4];");
+
+        $key = $this->_getStaticScalarValue($params[2]);
+        $value = $this->_getStaticScalarValue($params[4]);
+        $list[$key] = $value;
 
         return $list;
     }
@@ -776,7 +779,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function non_empty_static_array_pair_list_3($params)
     {
-        return eval("return array($params[0] => $params[2]);");
+        $key = $this->_getStaticScalarValue($params[0]);
+        $value = $this->_getStaticScalarValue($params[2]);
+
+        return array($key => $value);
     }
 
     /**
