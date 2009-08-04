@@ -739,12 +739,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function static_array_pair_list_2($params)
     {
-        $list = new ArrayObject();
-        foreach ($params[0] as $key => $value) {
-            $list->offsetSet($key, $value);
-        }
-
-        return $list;
+        return $this->_toArrayObject($params[0]);
     }
 
 
@@ -1675,7 +1670,20 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
 
 
 
+    protected function _toArrayObject(array $array)
+    {
+        $arrayObject = new ArrayObject();
 
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->_toArrayObject($value);
+            }
+
+            $arrayObject->offsetSet($key, $value);
+        }
+
+        return $arrayObject;
+    }
 
     protected function _getVariableName($name)
     {
@@ -1694,7 +1702,13 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function _getStaticScalarValue($scalar)
     {
         if ($scalar instanceof ArrayObject) {
-            $value = (array)$scalar;
+            $value = array();
+            $iterator = $scalar->getIterator();
+
+            while ($iterator->valid()) {
+                $value[$iterator->key()] = $this->_getStaticScalarValue($iterator->current());
+                $iterator->next();
+            }
         } else {
             switch (strtolower($scalar)) {
             case 'null':
