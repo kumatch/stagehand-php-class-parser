@@ -156,13 +156,14 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
 
         $properties = $class->getProperties();
 
-        $this->assertEquals(count($properties), 27);
+        $this->assertEquals(count($properties), 32);
 
         $this->assertNull($properties['foo']->getValue());
         $this->assertEquals($properties['bar']->getValue(), 100);
         $this->assertEquals($properties['baz']->getValue(), 'BAZ');
         $this->assertEquals($properties['qux']->getValue(), array(1, 5, 10));
         $this->assertEquals($properties['quux']->getValue(), 'Stagehand_Class_Parser_ClassTest_Foo::string');
+        $this->assertEquals($properties['corge']->getValue(), array('foo' => 'bar', 'baz' => 10));
 
         $this->assertEquals($properties['null_value']->getValue(), null);
         $this->assertEquals($properties['null_string']->getValue(), 'null');

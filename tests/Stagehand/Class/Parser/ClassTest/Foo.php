@@ -79,8 +79,13 @@ class Stagehand_Class_Parser_ClassTest_Foo
 
     public $qux = array(1, 5, 10);
     public $quux = Stagehand_Class_Parser_ClassTest_Foo::string;
+    public $corge = array('foo' => 'bar', 'baz' => 10);
     public $null_value = null;
     public $null_string = 'null';
+    public $true_value = true;
+    public $true_string = 'true';
+    public $false_value = false;
+    public $false_string = 'false';
     // public $dummy1;
     /* public $dummy2; */
 

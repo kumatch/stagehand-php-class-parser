@@ -740,8 +740,8 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function static_array_pair_list_2($params)
     {
         $list = new ArrayObject();
-        foreach ($params[0] as $param) {
-            $list->append($param);
+        foreach ($params[0] as $key => $value) {
+            $list->offsetSet($key, $value);
         }
 
         return $list;
@@ -754,8 +754,10 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function non_empty_static_array_pair_list_1($params)
     {
-        array_push($params[0], array($params[2], $params[3], $params[4]));
-        return $params[0];
+        $list = $params[0];
+        eval("\$list[$params[2]] = $params[4];");
+
+        return $list;
     }
 
     /**
@@ -774,7 +776,7 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
      */
     protected function non_empty_static_array_pair_list_3($params)
     {
-        return array($params);
+        return eval("return array($params[0] => $params[2]);");
     }
 
     /**
@@ -1431,8 +1433,14 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function non_empty_parameter_list_3($params)
     {
         $arguments = $this->non_empty_parameter_list_1(array($params[0], $params[2]));
+
+        if (is_array($params[4])) {
+            $arguments[0]->setValue(implode('', $params[4]), true);
+        } else {
+            $arguments[0]->setValue($this->_getStaticScalarValue($params[4]));
+        }
+
         $arguments[0]->setReference();
-        $arguments[0]->setValue($params[4]->getValue());
         $arguments[0]->setRequirement(false);
 
         return $arguments;
@@ -1446,7 +1454,13 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     {
         $arguments = $this->non_empty_parameter_list_1(array($params[0], $params[1]));
         $arguments[0]->setReference();
-        $arguments[0]->setValue($params[3]->getValue());
+
+        if (is_array($params[3])) {
+            $arguments[0]->setValue(implode('', $params[3]), true);
+        } else {
+            $arguments[0]->setValue($this->_getStaticScalarValue($params[3]));
+        }
+
         $arguments[0]->setRequirement(false);
 
         return $arguments;
@@ -1484,8 +1498,14 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
     protected function non_empty_parameter_list_7($params)
     {
         $arguments = $this->non_empty_parameter_list_1(array($params[2], $params[4]));
+
+        if (is_array($params[6])) {
+            $arguments[0]->setValue(implode('', $params[6]), true);
+        } else {
+            $arguments[0]->setValue($this->_getStaticScalarValue($params[6]));
+        }
+
         $arguments[0]->setReference();
-        $arguments[0]->setValue($params[6]->getValue());
         $arguments[0]->setRequirement(false);
         array_push($params[0], $arguments[0]);
 
