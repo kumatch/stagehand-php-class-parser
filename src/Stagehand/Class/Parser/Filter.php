@@ -1763,7 +1763,25 @@ class Stagehand_Class_Parser_Filter extends Stagehand_PHP_Parser_Dumb
         $value = $statement;
         while (1) {
             if (is_array($value)) {
-                $value = end($value);
+                $count = count($value);
+                while ($count) {
+                    $v = $value[$count - 1];
+                    if ($v instanceof Stagehand_PHP_Lexer_Token || is_array($v)) {
+                        $value = $v;
+                        break;
+                    }
+
+                    if (count($v->getValues()) > 0) {
+                        $value = $v;
+                        break;
+                    } else {
+                        --$count;
+                        if ($count == 0) {
+                            // var_dump($statement);
+                            throw new Stagehand_Class_Parser_Exception('Gone statements token.');
+                        }
+                    }
+                }
             }
 
             if ($value instanceof Stagehand_PHP_Parser_YYToken) {
