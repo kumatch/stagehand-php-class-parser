@@ -252,6 +252,10 @@ class Stagehand_Class_Parser_ClassTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($c->quux, 'example');
         $this->assertEquals($c->null_value, null);
         $this->assertEquals($c->null_string, 'null');
+        $this->assertTrue($c->true_value);
+        $this->assertEquals($c->true_string, 'true');
+        $this->assertFalse($c->false_value);
+        $this->assertEquals($c->false_string, 'false');
     }
 
     /**
