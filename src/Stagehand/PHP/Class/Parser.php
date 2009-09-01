@@ -35,15 +35,99 @@
  * @since      File available since Release 0.1.0
  */
 
-error_reporting(E_ALL);
+// {{{ Stagehand_PHP_Class_Parser
 
-set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
-                 get_include_path()
-                 );
+/**
+ * A class for parsing PHP class.
+ *
+ * @package    stagehand-php-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */
+class Stagehand_PHP_Class_Parser
+{
 
-require_once 'PHPUnit/Framework.php';
-require_once 'Stagehand/Autoload/PEAR.php';
+    // {{{ properties
+
+    /**#@+
+     * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    // }}}
+    // {{{ parse()
+
+    /**
+     * Parses a PHP class.
+     *
+     * @param string $filename  a filename of PHP script.
+     * @return mixed
+     */
+    public static function parse($filename)
+    {
+        $lexer = new Stagehand_PHP_Lexer($filename);
+        $filter = new Stagehand_PHP_Class_Parser_Filter();
+
+        $parser = new Stagehand_PHP_Parser($lexer, $filter);
+        $parser->parse();
+
+        $classes = $filter->getClasses();
+
+        $code = $filter->getExternalCode();
+        if ($code) {
+            $class = $filter->getCurrentClass();
+            $class->setPostCode($code);
+            $filter->setExternalCode('');
+        }
+
+        if (!count($classes)) {
+            return;
+        }
+
+        if (count($classes) == 1) {
+            return $classes[0];
+        }
+
+        return $classes;
+    }
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    // }}}
+}
+
+// }}}
 
 /*
  * Local Variables:

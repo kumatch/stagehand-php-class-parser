@@ -35,15 +35,74 @@
  * @since      File available since Release 0.1.0
  */
 
-error_reporting(E_ALL);
+$a = 10;
+define('Stagehand_PHP_Class_Parser_ClassTest_HasOtherCodes_Foo', 10);
+Stagehand_PHP_Class_Parser_ClassTest_HasOtherCodes_Bar::doMethod(10, 20, 30);
 
-set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
-                 get_include_path()
-                 );
+function stagehand_class_parser_classTest_hasOtherCodes_baz($baz)
+{
+    return $baz * 2;
+}
+__halt_compiler();
+const Stagehand_PHP_Class_Parser_ClassTest_HasOtherCodes_FooConst = 10;
 
-require_once 'PHPUnit/Framework.php';
-require_once 'Stagehand/Autoload/PEAR.php';
+
+// {{{ Stagehand_PHP_Class_Parser_ClassTest_HasOtherCodes
+
+/**
+ * A test class for Stagehand_PHP_Class_Parser
+ *
+ * @package    stagehand-php-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */
+class Stagehand_PHP_Class_Parser_ClassTest_HasOtherCodes
+{
+    /**#@+
+     * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**#@-*/
+
+    // }}}
+}
+
+// }}}
+
+Stagehand_PHP_Class_Parser_ClassTest_HasOtherCode::doMethodA();
+Stagehand_PHP_Class_Parser_ClassTest_HasOtherCode::doMethodB('foo');
 
 /*
  * Local Variables:

@@ -35,15 +35,132 @@
  * @since      File available since Release 0.1.0
  */
 
-error_reporting(E_ALL);
+// {{{ Stagehand_PHP_Class_Parser_AbstractTest_Foo
 
-set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
-                 realpath(dirname(__FILE__) . '/../src') . PATH_SEPARATOR .
-                 get_include_path()
-                 );
+/**
+ * A test class for Stagehand_PHP_Class_Parser
+ *
+ * @package    stagehand-php-class-parser
+ * @copyright  2009 KUMAKURA Yousuke <kumatch@gmail.com>
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
+ * @version    Release: @package_version@
+ * @since      Class available since Release 0.1.0
+ */
+abstract class Stagehand_PHP_Class_Parser_AbstractTest_Foo
+{
+    const number = 10;
 
-require_once 'PHPUnit/Framework.php';
-require_once 'Stagehand/Autoload/PEAR.php';
+    /**#@+
+     * @access public
+     */
+
+    /**
+     * public foo
+     */
+    public $foo;
+
+    /**
+     * public static bar
+     */
+    public static $bar = 100;
+
+    /**
+     * var baz
+     */
+    var $baz = 'BAZ';
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    protected $_bar;
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    private $_baz;
+
+    /**#@-*/
+
+    /**#@+
+     * @access public
+     */
+
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * staticMethod()
+     */
+    public static function staticMethod()
+    {
+    }
+
+    /**
+     * finalMethod()
+     */
+    final public function finalMethod()
+    {
+    }
+
+    /**
+     * abstractPublicMethod()
+     */
+    abstract public function abstractPublicMethod();
+
+    /**#@-*/
+
+    /**#@+
+     * @access protected
+     */
+
+    /**
+     * protectedMethod()
+     */
+    protected function protectedMethod()
+    {
+        return $this->_bar ? true : false;
+    }
+
+    /**
+     * abstractProtectedMethod()
+     */
+    abstract protected function abstractProtectedMethod($bar);
+
+    /**#@-*/
+
+    /**#@+
+     * @access private
+     */
+
+    /**
+     * privateMethod()
+     */
+    private function privateMethod($baz)
+    {
+        /**
+         * A document block in method.
+         */
+        if ($baz) {
+            $this->_baz = $baz;
+        }
+    }
+
+    /**#@-*/
+
+    // }}}
+}
+
+// }}}
 
 /*
  * Local Variables:

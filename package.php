@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    sh-class-parser
+ * @package    stagehand-php-class-parser
  * @copyright  2009 KUMAKURA Yousuke <kumatch@users.sourceforge.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  * @version    Release: @package_version@
@@ -44,7 +44,7 @@ $releaseVersion = '0.1.0';
 $releaseStability = 'beta';
 $apiVersion = '0.1.0';
 $apiStability = 'beta';
-$notes = 'The initial release of Stagehand_Class_Parser.';
+$notes = 'The initial release of Stagehand_PHP_Class_Parser.';
  
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -60,10 +60,10 @@ $package->setOptions(array('filelistgenerator' => 'file',
                            'ignore' => array('package.php'))
                      );
  
-$package->setPackage('Stagehand_Class_Parser');
+$package->setPackage('Stagehand_PHP_Class_Parser');
 $package->setPackageType('php');
 $package->setSummary('A parser class for a PHP class.');
-$package->setDescription('Stagehand_Class_Parser provides features of the parsing and building to models (Stagehand_Class) for a PHP class.');
+$package->setDescription('Stagehand_PHP_Class_Parser provides features of the parsing and building to models (Stagehand_PHP_Class) for a PHP class.');
 $package->setChannel('pear.piece-framework.com');
 $package->setLicense('BSD License (revised)', 'http://www.opensource.org/licenses/bsd-license.php');
 $package->setAPIVersion($apiVersion);
@@ -77,7 +77,7 @@ $package->addMaintainer('lead', 'kumatch', 'KUMAKURA Yousuke', 'kumatch@gmail.co
 $package->addGlobalReplacement('package-info', '@package_version@', 'version');
 $package->addPackageDepWithChannel('required', 'Stagehand_PHP_Parser', 'pear.piece-framework.com', '0.1.0');
 $package->addPackageDepWithChannel('required', 'Stagehand_PHP_Lexer', 'pear.piece-framework.com', '0.1.0');
-$package->addPackageDepWithChannel('required', 'Stagehand_Class', 'pear.piece-framework.com', '0.1.0');
+$package->addPackageDepWithChannel('required', 'Stagehand_PHP_Class', 'pear.piece-framework.com', '0.1.0');
 $package->generateContents();
  
 if (array_key_exists(1, $_SERVER['argv']) && $_SERVER['argv'][1] == 'make') {
