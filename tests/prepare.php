@@ -43,7 +43,10 @@ set_include_path(realpath(dirname(__FILE__)) . PATH_SEPARATOR .
                  );
 
 require_once 'PHPUnit/Framework.php';
-require_once 'Stagehand/Autoload/PEAR.php';
+require_once 'Stagehand/Autoload.php';
+$loader = Stagehand_Autoload::getLegacyLoader();
+$loader->addNamespace('Stagehand');
+Stagehand_Autoload::register($loader);
 
 /*
  * Local Variables:
