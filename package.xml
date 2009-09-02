@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.9.0RC4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
- <name>Stagehand_Class_Parser</name>
+ <name>Stagehand_PHP_Class_Parser</name>
  <channel>pear.piece-framework.com</channel>
  <summary>A parser class for a PHP class.</summary>
- <description>Stagehand_Class_Parser provides features of the parsing and building to models (Stagehand_Class) for a PHP class.</description>
+ <description>Stagehand_PHP_Class_Parser provides features of the parsing and building to models (Stagehand_PHP_Class) for a PHP class.</description>
  <lead>
   <name>KUMAKURA Yousuke</name>
   <user>kumatch</user>
   <email>kumatch@gmail.com</email>
   <active>yes</active>
  </lead>
- <date>2009-07-31</date>
- <time>16:35:11</time>
+ <date>2009-09-02</date>
+ <time>17:57:07</time>
  <version>
   <release>0.1.0</release>
   <api>0.1.0</api>
@@ -25,102 +25,106 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
  <notes>
-The initial release of Stagehand_Class_Parser.
+The initial release of Stagehand_PHP_Class_Parser.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="src">
     <dir name="Stagehand">
-     <dir name="Class">
-      <dir name="Parser">
-       <file name="Exception.php" role="php">
+     <dir name="PHP">
+      <dir name="Class">
+       <dir name="Parser">
+        <file name="Exception.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file name="Filter.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+       </dir> <!-- /src/Stagehand/PHP/Class/Parser -->
+       <file name="Parser.php" role="php">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
-       <file name="Filter.php" role="php">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-      </dir> <!-- /src/Stagehand/Class/Parser -->
-      <file name="Parser.php" role="php">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
-     </dir> <!-- /src/Stagehand/Class -->
+      </dir> <!-- /src/Stagehand/PHP/Class -->
+     </dir> <!-- /src/Stagehand/PHP -->
     </dir> <!-- /src/Stagehand -->
    </dir> <!-- /src -->
    <dir name="tests">
     <dir name="Stagehand">
-     <dir name="Class">
-      <dir name="Parser">
-       <dir name="AbstractTest">
-        <file name="Bar.php" role="test">
+     <dir name="PHP">
+      <dir name="Class">
+       <dir name="Parser">
+        <dir name="AbstractTest">
+         <file name="Bar.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="Foo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Stagehand/PHP/Class/Parser/AbstractTest -->
+        <dir name="ClassTest">
+         <file name="Bar.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="Baz.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="Foo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasOneInterface.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasOtherCodes.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasOtherCodesTwo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasThreeInterfaces.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceOne.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceThree.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceTwo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Stagehand/PHP/Class/Parser/ClassTest -->
+        <dir name="InterfaceTest">
+         <file name="Foo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasOneInterface.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="HasThreeInterfaces.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceOne.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceThree.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+         <file name="InterfaceTwo.php" role="test">
+          <tasks:replace from="@package_version@" to="version" type="package-info" />
+         </file>
+        </dir> <!-- /tests/Stagehand/PHP/Class/Parser/InterfaceTest -->
+        <file name="AbstractTest.php" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file name="Foo.php" role="test">
+        <file name="ClassTest.php" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-       </dir> <!-- /tests/Stagehand/Class/Parser/AbstractTest -->
-       <dir name="ClassTest">
-        <file name="Bar.php" role="test">
+        <file name="InterfaceTest.php" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file name="Baz.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="Foo.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasOneInterface.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasOtherCodes.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasOtherCodesTwo.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasThreeInterfaces.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceOne.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceThree.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceTwo.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-       </dir> <!-- /tests/Stagehand/Class/Parser/ClassTest -->
-       <dir name="InterfaceTest">
-        <file name="Foo.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasOneInterface.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="HasThreeInterfaces.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceOne.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceThree.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-        <file name="InterfaceTwo.php" role="test">
-         <tasks:replace from="@package_version@" to="version" type="package-info" />
-        </file>
-       </dir> <!-- /tests/Stagehand/Class/Parser/InterfaceTest -->
-       <file name="AbstractTest.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="ClassTest.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-       <file name="InterfaceTest.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
-      </dir> <!-- /tests/Stagehand/Class/Parser -->
-     </dir> <!-- /tests/Stagehand/Class -->
+       </dir> <!-- /tests/Stagehand/PHP/Class/Parser -->
+      </dir> <!-- /tests/Stagehand/PHP/Class -->
+     </dir> <!-- /tests/Stagehand/PHP -->
     </dir> <!-- /tests/Stagehand -->
     <file name="prepare.php" role="test">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -147,7 +151,7 @@ The initial release of Stagehand_Class_Parser.
     <min>0.1.0</min>
    </package>
    <package>
-    <name>Stagehand_Class</name>
+    <name>Stagehand_PHP_Class</name>
     <channel>pear.piece-framework.com</channel>
     <min>0.1.0</min>
    </package>
@@ -164,10 +168,10 @@ The initial release of Stagehand_Class_Parser.
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2009-07-31</date>
+   <date>2009-09-02</date>
    <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD License (revised)</license>
    <notes>
-The initial release of Stagehand_Class_Parser.
+The initial release of Stagehand_PHP_Class_Parser.
    </notes>
   </release>
  </changelog>
